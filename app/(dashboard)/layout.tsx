@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { AppShell } from "@/components/layout/app-shell";
 
 export default async function DashboardLayout({
   children,
@@ -10,5 +11,5 @@ export default async function DashboardLayout({
   const session = await auth();
   if (!session?.user) redirect(ROUTES.login);
 
-  return <div className="flex min-h-screen flex-col">{children}</div>;
+  return <AppShell user={session.user}>{children}</AppShell>;
 }
