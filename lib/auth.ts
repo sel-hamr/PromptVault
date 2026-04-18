@@ -1,30 +1,98 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
+import { ROUTES } from "@/constants/routes";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db),
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(db) as NextAuthOptions["adapter"],
   providers: [
-    GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    GitHubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
+        });
+
+        if (!user || !user.password_hash) {
+          return null;
+        }
+
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password_hash
+        );
+
+        if (!isValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.username,
+        };
+      },
     }),
   ],
-  session: { strategy: "database" },
+  // JWT strategy is required for CredentialsProvider.
+  // OAuth accounts are still stored via PrismaAdapter for account linking.
+  session: { strategy: "jwt" },
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: ROUTES.login,
+    error: ROUTES.login,
   },
   callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+      }
       return session;
     },
   },
-});
+};
+
+// Route handler — used by app/api/auth/[...nextauth]/route.ts
+const handler = NextAuth(authOptions);
+
+export const handlers = { GET: handler, POST: handler };
+
+// Server Component / Route Handler session helper (replaces v5's auth())
+export async function auth() {
+  return getServerSession(authOptions);
+}
+
+// Re-export for any server code that imports signIn/signOut by name.
+// In v4, these are client-side operations — server actions should NOT call
+// these directly. They are provided here as no-op stubs so existing imports
+// compile; the real sign-in flow is triggered from the client via
+// next-auth/react's signIn().
+export const signIn = undefined;
+export const signOut = undefined;

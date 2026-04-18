@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
+import { ROUTES } from "@/constants/routes";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Sparkles, MousePointer2, Plus, Hash, GitFork, Star } from "lucide-react";
 
@@ -316,7 +317,7 @@ export function AuthShell({ title, subtitle, footer, children }: AuthShellProps)
           <p className="text-[0.8125rem] text-muted-foreground">
             Need help?{" "}
             <Link
-              href="/support"
+              href={ROUTES.support}
               className="font-semibold text-foreground underline-offset-4 hover:underline"
             >
               Contact us
@@ -354,10 +355,10 @@ export function AuthShell({ title, subtitle, footer, children }: AuthShellProps)
         <footer className="relative px-7 pb-5 md:px-10 lg:hidden">
           <div className="flex items-center gap-4 text-[0.75rem] text-muted-foreground/60">
             <span>&copy; {new Date().getFullYear()} PromptVault</span>
-            <Link href="/privacy" className="transition-colors hover:text-foreground">
+            <Link href={ROUTES.privacy} className="transition-colors hover:text-foreground">
               Privacy
             </Link>
-            <Link href="/terms" className="transition-colors hover:text-foreground">
+            <Link href={ROUTES.terms} className="transition-colors hover:text-foreground">
               Terms
             </Link>
           </div>
@@ -436,10 +437,10 @@ export function AuthShell({ title, subtitle, footer, children }: AuthShellProps)
             >
               <span>&copy; {new Date().getFullYear()} PromptVault</span>
               <div className="flex items-center gap-5">
-                <Link href="/privacy" className="transition-colors hover:text-background">
+                <Link href={ROUTES.privacy} className="transition-colors hover:text-background">
                   Privacy
                 </Link>
-                <Link href="/terms" className="transition-colors hover:text-background">
+                <Link href={ROUTES.terms} className="transition-colors hover:text-background">
                   Terms
                 </Link>
               </div>

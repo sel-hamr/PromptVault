@@ -1,3 +1,5 @@
+import { ROUTES } from "@/constants/routes";
+
 export type NavItem = {
   title: string;
   href: string;
@@ -5,12 +7,12 @@ export type NavItem = {
 };
 
 export const mainNav: NavItem[] = [
-  { title: "Home", href: "/" },
-  { title: "Dashboard", href: "/dashboard" },
-  { title: "Settings", href: "/settings" },
+  { title: "Home", href: ROUTES.home },
+  { title: "Dashboard", href: ROUTES.dashboard },
+  { title: "Settings", href: ROUTES.settings },
 ];
 
 export const authNav: NavItem[] = [
-  { title: "Login", href: "/login" },
-  { title: "Register", href: "/register" },
+  { title: "Login", href: ROUTES.login },
+  { title: "Register", href: ROUTES.register },
 ];
