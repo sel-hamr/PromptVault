@@ -3,6 +3,7 @@
 import { Menu, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppBreadcrumb } from "./app-breadcrumb";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type AppTopbarProps = {
   onMenuClick: () => void;
@@ -40,6 +41,8 @@ export function AppTopbar({ onMenuClick }: AppTopbarProps) {
           ⌘K
         </kbd>
       </div>
+
+      <ThemeToggle className="ml-2 shrink-0" />
     </header>
   );
 }

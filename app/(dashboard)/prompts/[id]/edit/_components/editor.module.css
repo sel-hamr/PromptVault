@@ -1,0 +1,70 @@
+.editor-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* The hidden highlight overlay — sits behind the transparent textarea */
+.editor-pre {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--foreground);
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+}
+
+.editor-textarea {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: transparent;
+  caret-color: var(--foreground);
+  background: transparent;
+  resize: none;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* ── Token colors ────────────────────────────────────────── */
+
+/* Headings */
+.t-heading { font-weight: 700; }
+.t-h1 { color: oklch(0.22 0 0); font-size: 1.1em; }
+.t-h2 { color: oklch(0.28 0 0); }
+.t-h3 { color: oklch(0.34 0 0); }
+
+/* Inline marks */
+.t-bold   { font-weight: 700; color: oklch(0.22 0 0); }
+.t-italic { font-style: italic; color: oklch(0.38 0 0); }
+.t-strike { text-decoration: line-through; color: oklch(0.6 0 0); }
+
+/* Code */
+.t-code  { color: oklch(0.45 0.1 200); background: oklch(0.96 0 0); border-radius: 3px; padding: 0 2px; }
+.t-fence { color: oklch(0.48 0.06 200); }
+
+/* Structural */
+.t-quote { color: oklch(0.55 0 0); font-style: italic; }
+.t-hr    { color: oklch(0.7 0 0); }
+.t-list  { color: oklch(0.35 0 0); font-weight: 600; }
+.t-table { color: oklch(0.45 0 0); }
+.t-link  { color: oklch(0.48 0.1 200); text-decoration: underline; }
+
+/* Variables — amber, the only saturated token so they pop */
+.t-variable { color: oklch(0.62 0.17 55); font-weight: 600; }
