@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Plus, X } from "lucide-react";
+import { LogOut, Plus, X } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "./vault-mark";
@@ -50,7 +52,7 @@ function NavLink({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/60",
         active
           ? "bg-sidebar-accent text-sidebar-accent-foreground"
-          : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+          : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
       )}
     >
       {active && (
@@ -64,7 +66,7 @@ function NavLink({
           "size-4 shrink-0 transition-colors",
           active
             ? "text-sidebar-foreground"
-            : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80"
+            : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80",
         )}
         strokeWidth={2}
       />
@@ -78,8 +80,20 @@ function NavLink({
   );
 }
 
-export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps) {
+export function AppSidebar({
+  mobileOpen,
+  onMobileClose,
+  user,
+}: AppSidebarProps) {
   const pathname = usePathname();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const handleSignOut = async () => {
+    if (isSigningOut) return;
+
+    setIsSigningOut(true);
+    await signOut({ callbackUrl: ROUTES.login });
+  };
 
   const content = (
     <div className="flex h-full flex-col">
@@ -148,13 +162,27 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
             </li>
           ))}
         </ul>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            onMobileClose();
+            void handleSignOut();
+          }}
+          disabled={isSigningOut}
+          className="mb-2 h-9 w-full justify-start gap-2.5 px-2.5 text-[0.8125rem] font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+        >
+          <LogOut className="size-4 shrink-0" strokeWidth={2} />
+          {isSigningOut ? "Signing out..." : "Logout"}
+        </Button>
         <Link
           href={ROUTES.settings}
           onClick={onMobileClose}
           aria-label="Account"
           className={cn(
             "flex items-center gap-2.5 rounded-md px-2 py-2 transition-colors",
-            "hover:bg-sidebar-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/60"
+            "hover:bg-sidebar-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring/60",
           )}
         >
           <span
@@ -163,11 +191,7 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
           >
             {user?.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={user.image}
-                alt=""
-                className="size-full object-cover"
-              />
+              <img src={user.image} alt="" className="size-full object-cover" />
             ) : (
               initials(user?.name, user?.email)
             )}
@@ -193,7 +217,7 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
       <aside
         className={cn(
           "hidden lg:sticky lg:top-0 lg:flex lg:h-svh lg:w-64 lg:shrink-0 lg:flex-col",
-          "border-r border-sidebar-border bg-sidebar text-sidebar-foreground"
+          "border-r border-sidebar-border bg-sidebar text-sidebar-foreground",
         )}
       >
         {content}
@@ -204,9 +228,7 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
         aria-hidden={!mobileOpen}
         className={cn(
           "fixed inset-0 z-40 bg-foreground/40 backdrop-blur-sm transition-opacity lg:hidden",
-          mobileOpen
-            ? "opacity-100"
-            : "pointer-events-none opacity-0"
+          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={onMobileClose}
       />
@@ -214,7 +236,7 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
         aria-hidden={!mobileOpen}
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-72 border-r border-sidebar-border bg-sidebar text-sidebar-foreground shadow-xl transition-transform lg:hidden",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {content}
