@@ -10,8 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { usePromptFilters } from "./use-prompt-filters";
-import type { Category, ModelTarget, SortOption, Visibility } from "./types";
+import { useExploreFilters } from "./use-explore-filters";
+import type {
+  Category,
+  ExploreSortOption,
+  ExploreVisibility,
+  ModelTarget,
+} from "./types";
 
 const MODEL_OPTIONS: Array<{ value: ModelTarget; label: string }> = [
   { value: "CHATGPT", label: "ChatGPT" },
@@ -23,13 +28,12 @@ const MODEL_OPTIONS: Array<{ value: ModelTarget; label: string }> = [
   { value: "UNIVERSAL", label: "Universal" },
 ];
 
-const VISIBILITY_OPTIONS: Array<{ value: Visibility; label: string }> = [
+const VISIBILITY_OPTIONS: Array<{ value: ExploreVisibility; label: string }> = [
   { value: "PUBLIC", label: "Public" },
-  { value: "PRIVATE", label: "Private" },
   { value: "UNLISTED", label: "Unlisted" },
 ];
 
-const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
+const SORT_OPTIONS: Array<{ value: ExploreSortOption; label: string }> = [
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
   { value: "top_rated", label: "Top rated" },
@@ -39,13 +43,13 @@ const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
 
 const ALL = "__all__";
 
-interface PromptToolbarProps {
+interface ExploreToolbarProps {
   categories: Category[];
 }
 
-export function PromptToolbar({ categories }: PromptToolbarProps) {
+export function ExploreToolbar({ categories }: ExploreToolbarProps) {
   const { q, category_id, model_target, visibility, sort, view, updateParam } =
-    usePromptFilters();
+    useExploreFilters();
 
   return (
     <div className="flex flex-col gap-2 md:flex-row md:items-center">
@@ -54,9 +58,9 @@ export function PromptToolbar({ categories }: PromptToolbarProps) {
         <Input
           defaultValue={q}
           onChange={(e) => updateParam("q", e.target.value)}
-          placeholder="Search your prompts…"
+          placeholder="Search prompts…"
           className="pl-8"
-          aria-label="Search prompts"
+          aria-label="Search public prompts"
         />
       </div>
 
@@ -64,9 +68,11 @@ export function PromptToolbar({ categories }: PromptToolbarProps) {
         {categories.length > 0 && (
           <Select
             value={category_id || ALL}
-            onValueChange={(v) => updateParam("category_id", v === ALL ? "" : v)}
+            onValueChange={(v) =>
+              updateParam("category_id", v === ALL ? "" : v)
+            }
           >
-            <SelectTrigger className="w-[10rem]" aria-label="Filter by category">
+            <SelectTrigger className="w-40" aria-label="Filter by category">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -84,7 +90,7 @@ export function PromptToolbar({ categories }: PromptToolbarProps) {
           value={model_target || ALL}
           onValueChange={(v) => updateParam("model_target", v === ALL ? "" : v)}
         >
-          <SelectTrigger className="w-[10rem]" aria-label="Filter by model">
+          <SelectTrigger className="w-40" aria-label="Filter by model">
             <SelectValue placeholder="Model" />
           </SelectTrigger>
           <SelectContent>
@@ -97,28 +103,8 @@ export function PromptToolbar({ categories }: PromptToolbarProps) {
           </SelectContent>
         </Select>
 
-        <Select
-          value={visibility || ALL}
-          onValueChange={(v) => updateParam("visibility", v === ALL ? "" : v)}
-        >
-          <SelectTrigger className="w-[9rem]" aria-label="Filter by visibility">
-            <SelectValue placeholder="Visibility" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>All visibility</SelectItem>
-            {VISIBILITY_OPTIONS.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={sort}
-          onValueChange={(v) => updateParam("sort", v)}
-        >
-          <SelectTrigger className="w-[9rem]" aria-label="Sort prompts">
+        <Select value={sort} onValueChange={(v) => updateParam("sort", v)}>
+          <SelectTrigger className="w-36" aria-label="Sort prompts">
             <SelectValue placeholder="Sort" />
           </SelectTrigger>
           <SelectContent>

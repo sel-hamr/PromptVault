@@ -1,13 +1,11 @@
-import type { PromptWithRelations } from "@/lib/data/prompts";
 import type { fetchCategories } from "@/lib/data/categories";
-import type { fetchTags } from "@/lib/data/tags";
+import type { ExplorePromptWithRelations } from "@/lib/data/explore-prompts";
 
-export type { PromptWithRelations };
+export type PromptWithRelations = ExplorePromptWithRelations;
 
 export type Category = Awaited<ReturnType<typeof fetchCategories>>[number];
-export type Tag = Awaited<ReturnType<typeof fetchTags>>[number];
 
-export type SortOption =
+export type ExploreSortOption =
   | "newest"
   | "oldest"
   | "top_rated"
@@ -23,6 +21,6 @@ export type ModelTarget =
   | "STABLE_DIFFUSION"
   | "UNIVERSAL";
 
-export type Visibility = "PUBLIC" | "PRIVATE" | "UNLISTED";
+export type ExploreVisibility = "PUBLIC" | "UNLISTED";
 
-export type PromptsViewMode = "grid" | "list";
+export type ExploreViewMode = "grid" | "list";

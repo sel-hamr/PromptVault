@@ -1,35 +1,20 @@
-"use client";
-
 import Link from "next/link";
-import { useState, type ElementType, type MouseEvent } from "react";
-import { toast } from "sonner";
+import { type ElementType } from "react";
 import {
-  MoreHorizontal,
-  Copy,
-  ClipboardCheck,
-  Pencil,
-  Trash2,
-  Star,
   GitFork,
+  Globe,
+  Star,
   Zap,
   Sparkles,
   Bot,
   ImageIcon,
   Wand2,
   Palette,
-  Globe,
   MessageSquare,
   Lock,
   EyeOff,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CopyButton } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
 import type { PromptWithRelations, Visibility } from "./types";
 
@@ -67,51 +52,17 @@ const VISIBILITY_LABEL: Record<Visibility, string> = {
 
 interface PromptCardProps {
   prompt: PromptWithRelations;
-  onEdit: (prompt: PromptWithRelations) => void;
-  onDuplicate: (id: string) => void;
-  onDelete: (prompt: PromptWithRelations) => void;
-  isDuplicating?: boolean;
 }
 
-export function PromptCard({
-  prompt,
-  onEdit,
-  onDuplicate,
-  onDelete,
-  isDuplicating,
-}: PromptCardProps) {
-  const [copied, setCopied] = useState(false);
-
+export function PromptCard({ prompt }: PromptCardProps) {
   const model = prompt.model_target ?? "UNIVERSAL";
-  const ModelIcon = MODEL_ICON[model] ?? Globe;
   const visibility = prompt.visibility as Visibility;
-  const VisibilityIcon = VISIBILITY_ICON[visibility];
-
   const tags = prompt.tags ?? [];
   const visibleTags = tags.slice(0, 3);
   const overflow = tags.length - visibleTags.length;
-
   const preview = prompt.content
     ? prompt.content.replace(/\s+/g, " ").trim().slice(0, 220)
     : null;
-
-  const stop = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleCopy = async (e: MouseEvent) => {
-    stop(e);
-    if (!prompt.content) return;
-    try {
-      await navigator.clipboard.writeText(prompt.content);
-      setCopied(true);
-      toast.success("Prompt copied");
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      toast.error("Failed to copy prompt");
-    }
-  };
 
   return (
     <Link
@@ -123,34 +74,11 @@ export function PromptCard({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       )}
     >
-      {/* <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
-          <ModelIcon className="size-3.5 shrink-0" aria-hidden />
-          <span className="truncate">{MODEL_LABEL[model] ?? model}</span>
-          <span aria-hidden className="text-muted-foreground/40">
-            ·
-          </span>
-          <span
-            className="inline-flex items-center gap-1"
-            title={VISIBILITY_LABEL[visibility]}
-          >
-            <VisibilityIcon className="size-3 shrink-0" aria-hidden />
-            <span>{VISIBILITY_LABEL[visibility]}</span>
-          </span>
-        </div> */}
-
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        aria-label="Copy prompt"
-        onClick={handleCopy}
-        className={cn(
-          "text-muted-foreground hover:text-foreground absolute top-2 right-2",
-          copied && "text-primary",
-        )}
-      >
-        {copied ? <ClipboardCheck /> : <Copy />}
-      </Button>
+      <CopyButton
+        value={prompt.content ?? ""}
+        successMessage="Prompt copied"
+        className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+      />
 
       <div className="space-y-1">
         <h3 className="line-clamp-1 text-sm font-semibold tracking-tight text-foreground">

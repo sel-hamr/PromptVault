@@ -1,16 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import { useState, type ElementType, type MouseEvent } from "react";
+import { type ElementType } from "react";
 import {
-  ClipboardCheck,
-  Copy,
   GitFork,
   Globe,
-  MoreHorizontal,
-  Pencil,
   Star,
-  Trash2,
   Zap,
   Sparkles,
   Bot,
@@ -21,16 +14,7 @@ import {
   Lock,
   EyeOff,
 } from "lucide-react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { CopyButton } from "@/components/ui/copy-button";
 import type { PromptWithRelations, Visibility } from "./types";
 
 const MODEL_ICON: Record<string, ElementType> = {
@@ -67,49 +51,19 @@ const VISIBILITY_LABEL: Record<Visibility, string> = {
 
 interface PromptListRowProps {
   prompt: PromptWithRelations;
-  onEdit: (prompt: PromptWithRelations) => void;
-  onDuplicate: (id: string) => void;
-  onDelete: (prompt: PromptWithRelations) => void;
 }
 
-export function PromptListRow({
-  prompt,
-  onEdit,
-  onDuplicate,
-  onDelete,
-}: PromptListRowProps) {
-  const [copied, setCopied] = useState(false);
-
+export function PromptListRow({ prompt }: PromptListRowProps) {
   const model = prompt.model_target ?? "UNIVERSAL";
   const ModelIcon = MODEL_ICON[model] ?? Globe;
   const visibility = prompt.visibility as Visibility;
   const VisibilityIcon = VISIBILITY_ICON[visibility];
-
   const tags = prompt.tags ?? [];
   const visibleTags = tags.slice(0, 3);
   const overflow = tags.length - visibleTags.length;
-
   const preview = prompt.content
     ? prompt.content.replace(/\s+/g, " ").trim().slice(0, 180)
     : null;
-
-  const stop = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleCopy = async (e: MouseEvent) => {
-    stop(e);
-    if (!prompt.content) return;
-    try {
-      await navigator.clipboard.writeText(prompt.content);
-      setCopied(true);
-      toast.success("Prompt copied");
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      toast.error("Failed to copy prompt");
-    }
-  };
 
   return (
     <Link
@@ -163,10 +117,7 @@ export function PromptListRow({
         )}
       </div>
 
-      <div
-        className="flex items-center gap-2 md:pl-4"
-        onClick={stop}
-      >
+      <div className="flex items-center gap-2 md:pl-4">
         <div className="text-right text-[0.7rem] tabular-nums text-muted-foreground">
           <p className="inline-flex items-center gap-1">
             <Zap className="size-3" aria-hidden />
@@ -182,47 +133,7 @@ export function PromptListRow({
           </p>
         </div>
 
-        <Button
-          type="button"
-          size="icon-sm"
-          variant="ghost"
-          aria-label="Copy prompt"
-          onClick={handleCopy}
-          className={cn(copied && "text-primary")}
-        >
-          {copied ? <ClipboardCheck /> : <Copy />}
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              size="icon-sm"
-              variant="ghost"
-              aria-label="Open prompt actions"
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40! min-w-40">
-            <DropdownMenuItem onClick={() => onEdit(prompt)}>
-              <Pencil />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDuplicate(prompt.id)}>
-              <Copy />
-              Duplicate
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => onDelete(prompt)}
-            >
-              <Trash2 />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <CopyButton value={prompt.content ?? ""} successMessage="Prompt copied" />
       </div>
     </Link>
   );
