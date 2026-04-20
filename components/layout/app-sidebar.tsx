@@ -192,7 +192,7 @@ export function AppSidebar({ mobileOpen, onMobileClose, user }: AppSidebarProps)
       {/* Desktop */}
       <aside
         className={cn(
-          "hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col",
+          "hidden lg:sticky lg:top-0 lg:flex lg:h-svh lg:w-64 lg:shrink-0 lg:flex-col",
           "border-r border-sidebar-border bg-sidebar text-sidebar-foreground"
         )}
       >
