@@ -161,13 +161,17 @@ export function PiecesExplorer({
     });
 
     refetch(filters);
-    setViewing((current) => (current?.id === saved.id ? saved : current));
+    setViewing((current: Piece | undefined) =>
+      current?.id === saved.id ? saved : current,
+    );
   };
 
   const handleDeleted = (pieceId: string) => {
     setPieces((previous) => previous.filter((piece) => piece.id !== pieceId));
     setDeleting(undefined);
-    setViewing((current) => (current?.id === pieceId ? undefined : current));
+    setViewing((current: Piece | undefined) =>
+      current?.id === pieceId ? undefined : current,
+    );
   };
 
   const resetFilters = () => {
