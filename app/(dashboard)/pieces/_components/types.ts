@@ -84,7 +84,7 @@ export function getPieceTags(piece: Piece): string[] {
 
   return piece.variables
     .filter(isVariableLike)
-    .map((variable) => variable.name.trim())
+    .map((variable: { name: string }) => variable.name.trim())
     .filter((name) => name.length > 0)
     .slice(0, 4)
     .map((name) => `{{${name}}}`);
