@@ -38,7 +38,8 @@ interface PieceFormDialogProps {
   onSaved: (piece: Piece) => void;
 }
 
-type PieceFormInput = z.infer<typeof createPieceSchema>;
+type PieceFormInput = z.input<typeof createPieceSchema>;
+type PieceFormValues = z.output<typeof createPieceSchema>;
 
 const VISIBILITY_OPTIONS = ["PRIVATE", "UNLISTED", "PUBLIC"] as const;
 
@@ -51,6 +52,14 @@ function extractVariablesFromContent(content: string): Array<{ name: string }> {
   }
 
   return Array.from(names).map((name) => ({ name }));
+}
+
+function getActionErrorMessage(data: unknown, fallback: string): string {
+  if (data && typeof data === "object" && "error" in data) {
+    return String((data as { error?: unknown }).error ?? fallback);
+  }
+
+  return fallback;
 }
 
 export function PieceFormDialog({
@@ -68,7 +77,7 @@ export function PieceFormDialog({
     watch,
     reset,
     formState: { errors },
-  } = useForm<PieceFormInput>({
+  } = useForm<PieceFormInput, unknown, PieceFormValues>({
     resolver: zodResolver(createPieceSchema),
     defaultValues: {
       title: "",
@@ -107,9 +116,7 @@ export function PieceFormDialog({
     {
       onSuccess: ({ data }) => {
         if (!data || "error" in data) {
-          toast.error(
-            data && "error" in data ? data.error : "Failed to create piece",
-          );
+          toast.error(getActionErrorMessage(data, "Failed to create piece"));
           return;
         }
 
@@ -126,9 +133,7 @@ export function PieceFormDialog({
     {
       onSuccess: ({ data }) => {
         if (!data || "error" in data) {
-          toast.error(
-            data && "error" in data ? data.error : "Failed to update piece",
-          );
+          toast.error(getActionErrorMessage(data, "Failed to update piece"));
           return;
         }
 
@@ -142,7 +147,7 @@ export function PieceFormDialog({
 
   const isPending = isCreating || isUpdating;
 
-  const onSubmit = (values: PieceFormInput) => {
+  const onSubmit = (values: PieceFormValues) => {
     const payload = {
       ...values,
       variables: extractVariablesFromContent(values.content),
