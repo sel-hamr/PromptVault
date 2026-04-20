@@ -40,7 +40,7 @@ export function CopyButton({
       variant="ghost"
       size="icon-sm"
       aria-label="Copy to clipboard"
-      onClick={() => void handleCopy()}
+      onClick={(e) => void handleCopy(e)}
       className={cn(copied && "text-primary", className)}
     >
       {copied ? <ClipboardCheck /> : <Copy />}

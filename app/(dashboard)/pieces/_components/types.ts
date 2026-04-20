@@ -82,10 +82,10 @@ function isVariableLike(value: unknown): value is { name: string } {
 export function getPieceTags(piece: Piece): string[] {
   if (!Array.isArray(piece.variables)) return [];
 
-  return piece.variables
+  return (piece.variables as unknown[])
     .filter(isVariableLike)
     .map((variable: { name: string }) => variable.name.trim())
-    .filter((name) => name.length > 0)
+    .filter((name: string) => name.length > 0)
     .slice(0, 4)
-    .map((name) => `{{${name}}}`);
+    .map((name: string) => `{{${name}}}`);
 }
