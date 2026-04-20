@@ -5,7 +5,6 @@ import { useAction } from "next-safe-action/hooks";
 import { Search, MoreHorizontal, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -55,7 +54,7 @@ export function PiecesPanel({ initialPieces, editorRef }: Props) {
 
   const { execute } = useAction(listPiecesAction, {
     onSuccess: ({ data }) => {
-      if (data && "pieces" in data) setPieces(data.pieces as Piece[]);
+      if (data && "pieces" in data) setPieces(data.pieces);
     },
   });
 
@@ -179,7 +178,7 @@ export function PiecesPanel({ initialPieces, editorRef }: Props) {
                   <DropdownMenuItem onClick={() => append(piece)}>
                     Append to end
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => copy(piece)}>
+                  <DropdownMenuItem onClick={() => void copy(piece)}>
                     {copiedId === piece.id ? (
                       <Check className="mr-1.5 size-3" />
                     ) : (

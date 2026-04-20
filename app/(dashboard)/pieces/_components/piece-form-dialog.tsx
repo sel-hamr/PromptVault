@@ -56,7 +56,8 @@ function extractVariablesFromContent(content: string): Array<{ name: string }> {
 
 function getActionErrorMessage(data: unknown, fallback: string): string {
   if (data && typeof data === "object" && "error" in data) {
-    return String((data as { error?: unknown }).error ?? fallback);
+    const err = (data as { error?: unknown }).error;
+    return typeof err === "string" ? err : fallback;
   }
 
   return fallback;
@@ -168,7 +169,7 @@ export function PieceFormDialog({
           <DialogTitle>{isEdit ? "Edit piece" : "New piece"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="piece-title">Title</Label>
             <Input

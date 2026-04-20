@@ -1,62 +1,14 @@
 import Link from "next/link";
-import { type ElementType } from "react";
-import {
-  GitFork,
-  Globe,
-  Star,
-  Zap,
-  Sparkles,
-  Bot,
-  ImageIcon,
-  Wand2,
-  Palette,
-  MessageSquare,
-  Lock,
-  EyeOff,
-} from "lucide-react";
+import { GitFork, Star, Zap } from "lucide-react";
 import { CopyButton } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
-import type { PromptWithRelations, Visibility } from "./types";
-
-const MODEL_LABEL: Record<string, string> = {
-  CHATGPT: "ChatGPT",
-  CLAUDE: "Claude",
-  MIDJOURNEY: "Midjourney",
-  GEMINI: "Gemini",
-  DALLE: "DALL·E",
-  STABLE_DIFFUSION: "Stable Diffusion",
-  UNIVERSAL: "Universal",
-};
-
-const MODEL_ICON: Record<string, ElementType> = {
-  CHATGPT: MessageSquare,
-  CLAUDE: Sparkles,
-  MIDJOURNEY: ImageIcon,
-  GEMINI: Bot,
-  DALLE: Wand2,
-  STABLE_DIFFUSION: Palette,
-  UNIVERSAL: Globe,
-};
-
-const VISIBILITY_ICON: Record<Visibility, ElementType> = {
-  PUBLIC: Globe,
-  PRIVATE: Lock,
-  UNLISTED: EyeOff,
-};
-
-const VISIBILITY_LABEL: Record<Visibility, string> = {
-  PUBLIC: "Public",
-  PRIVATE: "Private",
-  UNLISTED: "Unlisted",
-};
+import type { PromptWithRelations } from "./types";
 
 interface PromptCardProps {
   prompt: PromptWithRelations;
 }
 
 export function PromptCard({ prompt }: PromptCardProps) {
-  const model = prompt.model_target ?? "UNIVERSAL";
-  const visibility = prompt.visibility as Visibility;
   const tags = prompt.tags ?? [];
   const visibleTags = tags.slice(0, 3);
   const overflow = tags.length - visibleTags.length;

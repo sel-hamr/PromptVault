@@ -38,8 +38,6 @@ export function PromptActions({
   prompt,
   isOwner,
   canFork,
-  categories,
-  tags,
 }: PromptActionsProps) {
   const router = useRouter();
   const [forkOpen, setForkOpen] = useState(false);

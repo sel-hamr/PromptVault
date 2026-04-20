@@ -32,16 +32,16 @@ export default async function ComposePage() {
 
   const initialPieces: ComposePiece[] =
     piecesRes?.data && "pieces" in piecesRes.data
-      ? (piecesRes.data.pieces as ComposePiece[])
+      ? piecesRes.data.pieces
       : [];
 
   const categories: Category[] =
     categoriesRes?.data && "categories" in categoriesRes.data
-      ? (categoriesRes.data.categories as Category[])
+      ? categoriesRes.data.categories
       : [];
 
   const tags: Tag[] =
-    tagsRes?.data && "tags" in tagsRes.data ? (tagsRes.data.tags as Tag[]) : [];
+    tagsRes?.data && "tags" in tagsRes.data ? tagsRes.data.tags : [];
 
   return (
     <ComposeWorkbench

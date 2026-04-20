@@ -75,7 +75,7 @@ function isVariableLike(value: unknown): value is { name: string } {
     typeof value === "object" &&
     value !== null &&
     "name" in value &&
-    typeof (value as { name: unknown }).name === "string"
+    typeof (value as Record<string, unknown>).name === "string"
   );
 }
 

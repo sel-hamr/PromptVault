@@ -19,7 +19,7 @@ export default async function PiecesPage() {
 
   const initialPieces: Piece[] =
     piecesResult?.data && "pieces" in piecesResult.data
-      ? (piecesResult.data.pieces as Piece[])
+      ? piecesResult.data.pieces
       : [];
 
   return (

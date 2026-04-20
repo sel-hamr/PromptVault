@@ -7,7 +7,7 @@ import { fetchTags } from "@/lib/data/tags";
 import { Button } from "@/components/ui/button";
 import { PromptToolbar } from "./_components/prompt-toolbar";
 import { PromptList } from "./_components/prompt-list";
-import type { PromptsViewMode, SortOption } from "./_components/types";
+import type { PromptsViewMode } from "./_components/types";
 
 type SearchParams = {
   q?: string;
@@ -22,15 +22,15 @@ type Props = { searchParams: Promise<SearchParams> };
 
 export default async function MyPromptsPage({ searchParams }: Props) {
   const session = await auth();
-  const userId = session!.user!.id!;
+  const userId = session!.user.id;
 
   const { q = "", category_id = "", model_target = "", visibility = "", sort = "newest", view = "grid" } =
     await searchParams;
 
   const hasFilters = !!(q || category_id || model_target || visibility || sort !== "newest");
 
-  const [prompts, categories, tags] = await Promise.all([
-    fetchPrompts({ userId, q: q || undefined, category_id: category_id || undefined, model_target: model_target || undefined, visibility: visibility || undefined, sort: sort as SortOption }),
+  const [prompts, categories] = await Promise.all([
+    fetchPrompts({ userId, q: q || undefined, category_id: category_id || undefined, model_target: model_target || undefined, visibility: visibility || undefined, sort }),
     fetchCategories(),
     fetchTags(),
   ]);

@@ -83,7 +83,7 @@ export function ComposeWorkbench({
           <Button
             type="button"
             variant="outline"
-            onClick={handleCopy}
+            onClick={() => void handleCopy()}
             disabled={isContentEmpty}
           >
             <Copy className="size-4" />

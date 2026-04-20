@@ -9,10 +9,8 @@ import { PromptHeader } from "./_components/prompt-header";
 import { PromptActions } from "./_components/prompt-actions";
 import { PromptContentBlock } from "./_components/prompt-content-block";
 import { PromptStats } from "./_components/prompt-stats";
-import { PromptVariables } from "./_components/prompt-variables";
 import { PromptForkedFrom } from "./_components/prompt-forked-from";
 import type { Category, Tag } from "../_components/types";
-import type { PromptDetail } from "./_components/types";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -37,7 +35,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function PromptDetailPage({ params }: Props) {
   const { id } = await params;
   const session = await auth();
-  const userId = session!.user!.id!;
+  const userId = session!.user.id;
 
   const [result, categoriesRes, tagsRes] = await Promise.all([
     getPromptAction({ id }),
@@ -47,7 +45,7 @@ export default async function PromptDetailPage({ params }: Props) {
 
   const prompt =
     result?.data && "prompt" in result.data
-      ? (result.data.prompt as PromptDetail)
+      ? result.data.prompt
       : null;
 
   if (!prompt) notFound();
@@ -58,11 +56,11 @@ export default async function PromptDetailPage({ params }: Props) {
 
   const categories: Category[] =
     categoriesRes?.data && "categories" in categoriesRes.data
-      ? (categoriesRes.data.categories as Category[])
+      ? categoriesRes.data.categories
       : [];
 
   const tags: Tag[] =
-    tagsRes?.data && "tags" in tagsRes.data ? (tagsRes.data.tags as Tag[]) : [];
+    tagsRes?.data && "tags" in tagsRes.data ? tagsRes.data.tags : [];
 
   const promptTags = prompt.tags ?? [];
 

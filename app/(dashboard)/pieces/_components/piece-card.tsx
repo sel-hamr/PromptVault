@@ -78,7 +78,7 @@ export function PieceCard({ piece, onOpenDetails }: PieceCardProps) {
             size="icon-sm"
             variant="ghost"
             aria-label="Copy piece"
-            onClick={handleCopy}
+            onClick={() => void handleCopy()}
           >
             {copied ? <ClipboardCheck /> : <Copy />}
           </Button>

@@ -22,7 +22,7 @@ export const createPromptAction = authActionClient
         ...data,
         user_id: userId,
         category_id: category_id ?? null,
-        variables: data.variables as Prisma.InputJsonValue,
+        variables: data.variables,
         tags: tag_ids.length
           ? { create: tag_ids.map((tag_id) => ({ tag_id })) }
           : undefined,
@@ -60,7 +60,7 @@ export const updatePromptAction = authActionClient
       data: {
         ...rest,
         ...(variables !== undefined
-          ? { variables: variables as Prisma.InputJsonValue }
+          ? { variables }
           : {}),
         version_count: { increment: 1 },
       },

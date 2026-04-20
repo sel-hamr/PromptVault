@@ -73,7 +73,7 @@ export function PiecesExplorer({
         });
 
         if (result?.data && "pieces" in result.data) {
-          setPieces(result.data.pieces as Piece[]);
+          setPieces(result.data.pieces);
           return;
         }
 
