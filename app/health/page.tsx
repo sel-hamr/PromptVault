@@ -1,15 +1,4 @@
 export default function HealthPage() {
-  const keys = [
-    "DATABASE_URL",
-    "NEXTAUTH_SECRET",
-    "NEXTAUTH_URL",
-    "GITHUB_CLIENT_ID",
-    "GITHUB_CLIENT_SECRET",
-    "GOOGLE_CLIENT_ID",
-    "GOOGLE_CLIENT_SECRET",
-    "NEXT_PUBLIC_APP_URL",
-  ];
-
   return (
     <main className="p-8 font-mono">
       <h1 className="text-xl font-bold mb-6">Health — env keys</h1>
@@ -23,7 +12,7 @@ export default function HealthPage() {
           </tr>
         </thead>
         <tbody>
-          {keys.map((key) => {
+          {Object.keys(process.env).map((key) => {
             const value = process.env[key];
             return (
               <tr key={key} className="border-t border-border">
