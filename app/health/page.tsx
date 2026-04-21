@@ -2,6 +2,7 @@ export default function HealthPage() {
   const keys = [
     "DATABASE_URL",
     "NEXTAUTH_SECRET",
+    "NEXTAUTH_URL",
     "GITHUB_CLIENT_ID",
     "GITHUB_CLIENT_SECRET",
     "GOOGLE_CLIENT_ID",
