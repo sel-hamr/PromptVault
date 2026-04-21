@@ -16,7 +16,9 @@ export default function HealthPage() {
         <thead>
           <tr className="text-left">
             <th className="pr-8 pb-2 text-muted-foreground">Key</th>
-            <th className="pb-2 text-muted-foreground">Value (first 8 chars)</th>
+            <th className="pb-2 text-muted-foreground">
+              Value (first 18 chars)
+            </th>
           </tr>
         </thead>
         <tbody>
