@@ -31,10 +31,10 @@ export default function HealthPage() {
                   {value ? (
                     <span>
                       <span className="text-green-600 dark:text-green-400">
-                        {value.slice(0, 8)}
+                        {value.slice(0, 18)}
                       </span>
                       <span className="text-muted-foreground">
-                        {"*".repeat(Math.max(0, value.length - 8))}
+                        {"*".repeat(Math.max(0, value.length - 18))}
                       </span>
                     </span>
                   ) : (
