@@ -8,8 +8,15 @@ const nextConfig: NextConfig = {
     "@prisma/client",
     ".prisma/client",
     "@prisma/adapter-pg",
+    "@prisma/client-runtime-utils",
     "pg",
   ],
+  outputFileTracingIncludes: {
+    "/**/*": [
+      "./node_modules/.prisma/**/*",
+      "./node_modules/@prisma/**/*",
+    ],
+  },
 };
 
 export default nextConfig;
