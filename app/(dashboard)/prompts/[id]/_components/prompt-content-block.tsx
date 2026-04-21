@@ -83,7 +83,7 @@ export function PromptContentBlock({
         </div>
 
         <button
-          onClick={handleCopy}
+          onClick={() => void handleCopy()}
           disabled={copied}
           className={cn(
             "flex items-center gap-1.5 rounded-md px-2.5 justify-center py-1 text-xs font-medium transition-all duration-200",

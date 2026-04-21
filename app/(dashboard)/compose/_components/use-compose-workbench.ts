@@ -66,7 +66,7 @@ export function useComposeWorkbench({
       if (!data || "error" in data) {
         toast.error(
           data && "error" in data
-            ? String(data.error ?? "Failed to save prompt")
+            ? (typeof data.error === "string" ? data.error : "Failed to save prompt")
             : "Failed to save prompt",
         );
         return;
@@ -86,7 +86,7 @@ export function useComposeWorkbench({
         if (!data || "error" in data) {
           toast.error(
             data && "error" in data
-              ? String(data.error ?? "Failed to create tag")
+              ? (typeof data.error === "string" ? data.error : "Failed to create tag")
               : "Failed to create tag",
           );
           return;
@@ -95,7 +95,7 @@ export function useComposeWorkbench({
         if ("tag" in data) {
           setAvailableTags((prev) => {
             if (prev.some((tag) => tag.id === data.tag.id)) return prev;
-            return [data.tag as Tag, ...prev];
+            return [data.tag, ...prev];
           });
           setTagIds((prev) =>
             prev.includes(data.tag.id) ? prev : [...prev, data.tag.id],

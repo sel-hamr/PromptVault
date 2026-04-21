@@ -14,7 +14,7 @@ export function LoginForm() {
     <form
       className="grid gap-4"
       noValidate
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
     >
       <div className="grid gap-1.5">
         <Label htmlFor="email" className="text-[0.8375rem] font-medium">

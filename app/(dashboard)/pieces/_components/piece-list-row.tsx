@@ -116,7 +116,7 @@ export function PieceListRow({
             size="icon-sm"
             variant="ghost"
             aria-label="Copy piece"
-            onClick={handleCopy}
+            onClick={() => void handleCopy()}
           >
             {copied ? <ClipboardCheck /> : <Copy />}
           </Button>
@@ -138,7 +138,7 @@ export function PieceListRow({
                   <Pencil />
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleCopy}>
+                <DropdownMenuItem onClick={() => void handleCopy()}>
                   <Copy />
                   Copy
                 </DropdownMenuItem>

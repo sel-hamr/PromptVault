@@ -18,7 +18,7 @@ export const createPieceAction = authActionClient
       data: {
         ...parsedInput,
         user_id: userId,
-        variables: parsedInput.variables as Prisma.InputJsonValue,
+        variables: parsedInput.variables,
       },
     });
     revalidatePath("/pieces");
@@ -39,7 +39,7 @@ export const updatePieceAction = authActionClient
       data: {
         ...rest,
         ...(variables !== undefined
-          ? { variables: variables as Prisma.InputJsonValue }
+          ? { variables }
           : {}),
       },
     });

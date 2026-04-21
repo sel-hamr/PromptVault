@@ -80,6 +80,7 @@ function PromptCard({ reduced }: { reduced: boolean }) {
       });
     }, 2000);
     // Kick off with the first piece assembled
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAssembled([0]);
     return () => window.clearInterval(id);
   }, [reduced]);

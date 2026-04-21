@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { MarkdownEditor, type PieceInsertHandle } from "./markdown-editor";
 import { VariablesList } from "./variables-list";
 import { PiecesPanel } from "./pieces-panel";
@@ -135,7 +134,7 @@ export function PromptEditForm({ prompt, categories, tags, initialPieces }: Prop
         onConfirm={() => router.push(`/prompts/${prompt.id}`)}
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
         {/* Sticky top bar */}
         <div className="sticky top-0 z-10 border-b border-border bg-background">
           <div className="container max-w-[1600px] flex items-center justify-between py-3 gap-4">
@@ -333,14 +332,7 @@ export function PromptEditForm({ prompt, categories, tags, initialPieces }: Prop
             >
               <div className="rounded-lg border border-border bg-card p-4 h-full">
                 <PiecesPanel
-                  initialPieces={
-                    initialPieces as {
-                      id: string;
-                      title: string;
-                      content: string;
-                      piece_type: string;
-                    }[]
-                  }
+                  initialPieces={initialPieces}
                   editorRef={editorRef}
                 />
               </div>

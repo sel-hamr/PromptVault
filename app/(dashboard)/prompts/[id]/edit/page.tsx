@@ -5,7 +5,6 @@ import { listCategoriesAction } from "@/lib/actions/category.actions";
 import { listTagsAction } from "@/lib/actions/tag.actions";
 import { listPiecesAction } from "@/lib/actions/piece.actions";
 import { PromptEditForm } from "./_components/prompt-edit-form";
-import type { PromptDetail } from "../_components/types";
 import type { Category, Tag } from "../../_components/types";
 import type { EditPiece } from "./_components/types";
 
@@ -26,7 +25,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function EditPromptPage({ params }: Props) {
   const { id } = await params;
   const session = await auth();
-  const userId = session!.user!.id!;
+  const userId = session!.user.id;
 
   const [promptRes, categoriesRes, tagsRes, piecesRes] = await Promise.all([
     getPromptAction({ id }),
@@ -37,22 +36,22 @@ export default async function EditPromptPage({ params }: Props) {
 
   const prompt =
     promptRes?.data && "prompt" in promptRes.data
-      ? (promptRes.data.prompt as PromptDetail)
+      ? promptRes.data.prompt
       : null;
 
   if (!prompt || prompt.user_id !== userId) notFound();
 
   const categories: Category[] =
     categoriesRes?.data && "categories" in categoriesRes.data
-      ? (categoriesRes.data.categories as Category[])
+      ? categoriesRes.data.categories
       : [];
 
   const tags: Tag[] =
-    tagsRes?.data && "tags" in tagsRes.data ? (tagsRes.data.tags as Tag[]) : [];
+    tagsRes?.data && "tags" in tagsRes.data ? tagsRes.data.tags : [];
 
   const initialPieces: EditPiece[] =
     piecesRes?.data && "pieces" in piecesRes.data
-      ? (piecesRes.data.pieces as EditPiece[])
+      ? piecesRes.data.pieces
       : [];
 
   return (

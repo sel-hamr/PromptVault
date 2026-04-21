@@ -75,17 +75,17 @@ function isVariableLike(value: unknown): value is { name: string } {
     typeof value === "object" &&
     value !== null &&
     "name" in value &&
-    typeof (value as { name: unknown }).name === "string"
+    typeof (value as Record<string, unknown>).name === "string"
   );
 }
 
 export function getPieceTags(piece: Piece): string[] {
   if (!Array.isArray(piece.variables)) return [];
 
-  return piece.variables
+  return (piece.variables as unknown[])
     .filter(isVariableLike)
-    .map((variable) => variable.name.trim())
-    .filter((name) => name.length > 0)
+    .map((variable: { name: string }) => variable.name.trim())
+    .filter((name: string) => name.length > 0)
     .slice(0, 4)
-    .map((name) => `{{${name}}}`);
+    .map((name: string) => `{{${name}}}`);
 }

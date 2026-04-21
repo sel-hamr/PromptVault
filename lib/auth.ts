@@ -10,7 +10,7 @@ import { env } from "@/lib/env";
 import { ROUTES } from "@/constants/routes";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db) as NextAuthOptions["adapter"],
+  adapter: PrismaAdapter(db),
   providers: [
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
@@ -64,15 +64,15 @@ export const authOptions: NextAuthOptions = {
     error: ROUTES.login,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (session.user && token.id) {
-        session.user.id = token.id as string;
+        session.user.id = token.id;
       }
       return session;
     },
@@ -80,8 +80,10 @@ export const authOptions: NextAuthOptions = {
 };
 
 // Route handler — used by app/api/auth/[...nextauth]/route.ts
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const handler = NextAuth(authOptions);
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 export const handlers = { GET: handler, POST: handler };
 
 // Server Component / Route Handler session helper (replaces v5's auth())

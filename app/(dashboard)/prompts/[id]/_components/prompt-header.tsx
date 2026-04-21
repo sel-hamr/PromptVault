@@ -60,7 +60,7 @@ interface PromptHeaderProps {
 export function PromptHeader({ prompt }: PromptHeaderProps) {
   const model = prompt.model_target ?? "UNIVERSAL";
   const ModelIcon = MODEL_ICON[model] ?? Globe;
-  const visibility = prompt.visibility as Visibility;
+  const visibility = prompt.visibility;
   const VisibilityIcon = VISIBILITY_ICON[visibility];
 
   return (

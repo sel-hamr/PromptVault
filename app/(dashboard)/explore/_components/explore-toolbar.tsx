@@ -14,7 +14,6 @@ import { useExploreFilters } from "./use-explore-filters";
 import type {
   Category,
   ExploreSortOption,
-  ExploreVisibility,
   ModelTarget,
 } from "./types";
 
@@ -26,11 +25,6 @@ const MODEL_OPTIONS: Array<{ value: ModelTarget; label: string }> = [
   { value: "DALLE", label: "DALL·E" },
   { value: "STABLE_DIFFUSION", label: "Stable Diffusion" },
   { value: "UNIVERSAL", label: "Universal" },
-];
-
-const VISIBILITY_OPTIONS: Array<{ value: ExploreVisibility; label: string }> = [
-  { value: "PUBLIC", label: "Public" },
-  { value: "UNLISTED", label: "Unlisted" },
 ];
 
 const SORT_OPTIONS: Array<{ value: ExploreSortOption; label: string }> = [
@@ -48,7 +42,7 @@ interface ExploreToolbarProps {
 }
 
 export function ExploreToolbar({ categories }: ExploreToolbarProps) {
-  const { q, category_id, model_target, visibility, sort, view, updateParam } =
+  const { q, category_id, model_target, sort, view, updateParam } =
     useExploreFilters();
 
   return (
