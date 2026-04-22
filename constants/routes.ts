@@ -7,6 +7,7 @@ export const ROUTES = {
   pieces: "/pieces",
   compose: "/compose",
   collections: "/collections",
+  library: "/library",
   explore: "/explore",
   settings: "/settings",
   support: "/support",

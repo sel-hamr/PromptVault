@@ -6,6 +6,7 @@ import {
   FolderHeart,
   Compass,
   Settings,
+  BookMarked,
   type LucideIcon,
 } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
@@ -24,10 +25,10 @@ export type NavGroup = {
 
 export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Workspace",
+    label: "Workshop",
     items: [
       { label: "Dashboard", href: ROUTES.dashboard, icon: LayoutDashboard },
-      { label: "My Prompts", href: ROUTES.prompts, icon: FileText },
+      { label: "Explore", href: ROUTES.explore, icon: Compass },
       { label: "Pieces", href: ROUTES.pieces, icon: Puzzle },
       { label: "Compose", href: ROUTES.compose, icon: Blocks, badge: "New" },
     ],
@@ -35,8 +36,9 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Library",
     items: [
+      { label: "My Prompts", href: ROUTES.prompts, icon: FileText },
       { label: "Collections", href: ROUTES.collections, icon: FolderHeart },
-      { label: "Explore", href: ROUTES.explore, icon: Compass },
+      { label: "References", href: ROUTES.library, icon: BookMarked },
     ],
   },
 ];

@@ -155,3 +155,62 @@ export const attachTagSchema = z.object({
   prompt_id: z.string().cuid(),
   tag_id: z.string().cuid(),
 });
+
+// ---------- Reference domain ----------
+
+export const referenceTypeSchema = z.enum([
+  "DOC",
+  "SKILL",
+  "AGENT",
+  "PATTERN",
+  "DECISION",
+]);
+
+export const createReferenceSchema = z.object({
+  title: z.string().min(1, "Title is required").max(200),
+  content: z.string().min(1, "Content is required"),
+  description: z.string().max(500).optional(),
+  source_url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  type: referenceTypeSchema.default("DOC"),
+  tag_ids: z.array(z.string().cuid()).default([]),
+});
+
+export const updateReferenceSchema = createReferenceSchema.partial().extend({
+  id: z.string().cuid(),
+});
+
+export const referenceIdSchema = z.object({ id: z.string().cuid() });
+
+export const listReferencesSchema = z.object({
+  q: z.string().optional(),
+  type: referenceTypeSchema.optional(),
+  tag_slug: z.string().optional(),
+  page: z.number().int().min(1).default(1),
+  take: z.number().int().min(1).max(50).default(20),
+});
+
+// ---------- Snippet schemas ----------
+
+export const createSnippetSchema = z.object({
+  reference_id: z.string().cuid(),
+  title: z.string().min(1, "Title is required").max(200),
+  content: z.string().min(1, "Content is required"),
+  order: z.number().int().min(0).default(0),
+});
+
+export const updateSnippetSchema = createSnippetSchema.partial().extend({
+  id: z.string().cuid(),
+});
+
+export const snippetIdSchema = z.object({ id: z.string().cuid() });
+
+export const reorderSnippetsSchema = z.object({
+  reference_id: z.string().cuid(),
+  ordered_ids: z.array(z.string().cuid()),
+});
+
+export type ReferenceTypeValue = z.infer<typeof referenceTypeSchema>;
+export type CreateReferenceInput = z.infer<typeof createReferenceSchema>;
+export type UpdateReferenceInput = z.infer<typeof updateReferenceSchema>;
+export type CreateSnippetInput = z.infer<typeof createSnippetSchema>;
+export type UpdateSnippetInput = z.infer<typeof updateSnippetSchema>;
