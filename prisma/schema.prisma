@@ -42,6 +42,7 @@ model User {
 
   prompts       Prompt[]
   prompt_pieces PromptPiece[]
+  references    Reference[]
 }
 
 model Prompt {
@@ -112,6 +113,7 @@ model Tag {
   slug        String    @unique
   usage_count Int       @default(0)
   prompts     PromptTag[]
+  references  ReferenceTag[]
 
   @@index([slug])
 }
@@ -124,4 +126,58 @@ model PromptTag {
   tag    Tag    @relation(fields: [tag_id], references: [id])
 
   @@id([prompt_id, tag_id])
+}
+
+enum ReferenceType {
+  DOC
+  SKILL
+  AGENT
+  PATTERN
+  DECISION
+}
+
+model Reference {
+  id          String        @id @default(cuid())
+  user_id     String
+  title       String
+  content     String
+  description String?
+  source_url  String?
+  type        ReferenceType @default(DOC)
+  use_count   Int           @default(0)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  user     User           @relation(fields: [user_id], references: [id])
+  snippets Snippet[]
+  tags     ReferenceTag[]
+
+  @@index([user_id])
+  @@index([type])
+  @@index([created_at(sort: Desc)])
+}
+
+model Snippet {
+  id           String   @id @default(cuid())
+  reference_id String
+  title        String
+  content      String
+  order        Int      @default(0)
+  copy_count   Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  reference Reference @relation(fields: [reference_id], references: [id], onDelete: Cascade)
+
+  @@index([reference_id])
+}
+
+model ReferenceTag {
+  reference_id String
+  tag_id       String
+
+  reference Reference @relation(fields: [reference_id], references: [id], onDelete: Cascade)
+  tag       Tag       @relation(fields: [tag_id], references: [id])
+
+  @@id([reference_id, tag_id])
 }

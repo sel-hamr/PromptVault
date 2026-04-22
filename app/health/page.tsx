@@ -7,7 +7,7 @@ export default function HealthPage() {
           <tr className="text-left">
             <th className="pr-8 pb-2 text-muted-foreground">Key</th>
             <th className="pb-2 text-muted-foreground">
-              Value (first 18 chars)
+              Value (first 8 chars)
             </th>
           </tr>
         </thead>
@@ -21,10 +21,10 @@ export default function HealthPage() {
                   {value ? (
                     <span>
                       <span className="text-green-600 dark:text-green-400">
-                        {value.slice(0, 18)}
+                        {value.slice(0, 8)}
                       </span>
                       <span className="text-muted-foreground">
-                        {"*".repeat(Math.max(0, value.length - 18))}
+                        {"*".repeat(Math.max(0, value.length - 8))}
                       </span>
                     </span>
                   ) : (
