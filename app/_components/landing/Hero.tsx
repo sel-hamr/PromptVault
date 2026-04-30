@@ -151,24 +151,28 @@ export default function Hero() {
             Fork public prompts. Build your personal prompt system — finally.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTA */}
           <motion.div
             variants={fadeUp}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            className="mt-9 flex items-center justify-center lg:justify-start"
           >
-            <Link
-              href="/register"
-              className="group flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_32px_rgba(139,92,246,0.35)] transition-all hover:bg-violet-500 hover:shadow-[0_0_48px_rgba(139,92,246,0.55)]"
+            <motion.div
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 420, damping: 22 }}
             >
-              Start building free
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            <Link
-              href="/explore"
-              className="rounded-xl border border-border px-6 py-3.5 text-sm font-medium text-muted-foreground transition-all hover:border-foreground/20 hover:text-foreground"
-            >
-              Explore public prompts
-            </Link>
+              <Link
+                href="/register"
+                className="group relative flex items-center gap-2.5 overflow-hidden rounded-xl bg-violet-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(139,92,246,0.5),0_4px_24px_rgba(139,92,246,0.4)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(139,92,246,0.7),0_8px_40px_rgba(139,92,246,0.6)]"
+              >
+                <span
+                  className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full"
+                  aria-hidden="true"
+                />
+                Start building free
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
           </motion.div>
 
           {/* Stats */}
