@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion";
 import { Puzzle, Layers, GitFork, Lock, Tag, FolderOpen } from "lucide-react";
-import { fadeUp, scaleUp, staggerContainer, staggerSlow } from "@/lib/motion-variants";
+import {
+  fadeUp,
+  scaleUp,
+  staggerContainer,
+  staggerSlow,
+} from "@/lib/motion-variants";
 
 const FEATURES = [
   {
@@ -50,15 +55,6 @@ const FEATURES = [
     span: "",
     large: false,
   },
-  {
-    icon: FolderOpen,
-    label: "Collections",
-    description:
-      "Curate sets of related prompts. Your SEO toolkit, interview kit, onboarding pack.",
-    color: "#a78bfa",
-    span: "",
-    large: false,
-  },
 ];
 
 function FeatureCard({ feature }: { feature: (typeof FEATURES)[0] }) {
@@ -68,7 +64,7 @@ function FeatureCard({ feature }: { feature: (typeof FEATURES)[0] }) {
       variants={scaleUp}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-7 ${feature.span}`}
+      className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-5 ${feature.span}`}
     >
       <div
         className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl"
@@ -94,7 +90,14 @@ function FeatureCard({ feature }: { feature: (typeof FEATURES)[0] }) {
             Piece types
           </div>
           <div className="flex flex-wrap gap-2">
-            {["Persona", "Tone", "Format", "Constraint", "Context", "Custom"].map((t) => (
+            {[
+              "Persona",
+              "Tone",
+              "Format",
+              "Constraint",
+              "Context",
+              "Custom",
+            ].map((t) => (
               <span
                 key={t}
                 className="rounded-md px-2.5 py-1 text-xs font-medium"
@@ -124,7 +127,7 @@ function FeatureCard({ feature }: { feature: (typeof FEATURES)[0] }) {
 
 export default function Features() {
   return (
-    <section id="features" className="bg-muted/30 py-28">
+    <section id="features" className="bg-muted/30 py-7">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}

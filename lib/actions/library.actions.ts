@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { db } from "@/lib/db";
 import { authActionClient } from "@/lib/safe-action";
 import {
@@ -12,6 +12,7 @@ import {
   snippetIdSchema,
   reorderSnippetsSchema,
 } from "@/lib/validators";
+import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
 export const createReferenceAction = authActionClient
   .schema(createReferenceSchema)
@@ -29,7 +30,7 @@ export const createReferenceAction = authActionClient
       },
     });
 
-    revalidatePath("/library");
+    revalidateTag(CACHE_TAGS.library, {});
     return { reference };
   });
 
@@ -57,8 +58,7 @@ export const updateReferenceAction = authActionClient
       },
     });
 
-    revalidatePath("/library");
-    revalidatePath(`/library/${id}`);
+    revalidateTag(CACHE_TAGS.library, {});
     return { reference };
   });
 
@@ -70,7 +70,7 @@ export const deleteReferenceAction = authActionClient
 
     await db.reference.delete({ where: { id } });
 
-    revalidatePath("/library");
+    revalidateTag(CACHE_TAGS.library, {});
     return { id };
   });
 
@@ -95,7 +95,7 @@ export const createSnippetAction = authActionClient
 
     const snippet = await db.snippet.create({ data: parsedInput });
 
-    revalidatePath(`/library/${parsedInput.reference_id}`);
+    revalidateTag(CACHE_TAGS.library, {});
     return { snippet };
   });
 
@@ -113,8 +113,7 @@ export const updateSnippetAction = authActionClient
 
     const snippet = await db.snippet.update({ where: { id }, data });
 
-    const refId = reference_id ?? (await db.snippet.findUnique({ where: { id } }))?.reference_id;
-    if (refId) revalidatePath(`/library/${refId}`);
+    revalidateTag(CACHE_TAGS.library, {});
     return { snippet };
   });
 
@@ -129,7 +128,7 @@ export const deleteSnippetAction = authActionClient
 
     await db.snippet.delete({ where: { id } });
 
-    revalidatePath(`/library/${snippet.reference.id}`);
+    revalidateTag(CACHE_TAGS.library, {});
     return { id };
   });
 
@@ -154,5 +153,5 @@ export const reorderSnippetsAction = authActionClient
       )
     );
 
-    revalidatePath(`/library/${reference_id}`);
+    revalidateTag(CACHE_TAGS.library, {});
   });

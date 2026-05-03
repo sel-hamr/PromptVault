@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import slugify from "slugify";
 import { db } from "@/lib/db";
 import { actionClient, authActionClient } from "@/lib/safe-action";
@@ -10,6 +10,7 @@ import {
   attachTagSchema,
   tagIdSchema,
 } from "@/lib/validators";
+import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
 export const createTagAction = authActionClient
   .schema(createTagSchema)
@@ -20,6 +21,7 @@ export const createTagAction = authActionClient
       create: { name, slug },
       update: {},
     });
+    revalidateTag(CACHE_TAGS.tags, {});
     return { tag };
   });
 
@@ -39,6 +41,7 @@ export const deleteTagAction = authActionClient
   .action(async ({ parsedInput: { id } }) => {
     await db.promptTag.deleteMany({ where: { tag_id: id } });
     await db.tag.delete({ where: { id } });
+    revalidateTag(CACHE_TAGS.tags, {});
     return { success: true };
   });
 
@@ -59,7 +62,9 @@ export const attachTagAction = authActionClient
       data: { usage_count: { increment: 1 } },
     });
 
-    revalidatePath(`/prompts/${prompt_id}`);
+    revalidateTag(CACHE_TAGS.tags, {});
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.prompt(prompt_id), {});
     return { success: true };
   });
 
@@ -78,6 +83,8 @@ export const detachTagAction = authActionClient
       data: { usage_count: { decrement: 1 } },
     });
 
-    revalidatePath(`/prompts/${prompt_id}`);
+    revalidateTag(CACHE_TAGS.tags, {});
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.prompt(prompt_id), {});
     return { success: true };
   });

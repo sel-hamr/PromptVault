@@ -1,5 +1,8 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { Prisma, ReferenceType } from "@prisma/client";
 import { db } from "@/lib/db";
+import { CACHE_TAGS } from "./cache-tags";
 
 const referenceInclude = {
   tags: { include: { tag: true } },
@@ -22,7 +25,7 @@ type FetchReferencesArgs = {
 const isReferenceType = (value: string): value is ReferenceType =>
   Object.values(ReferenceType).includes(value as ReferenceType);
 
-export async function fetchReferences({
+async function _fetchReferences({
   userId,
   q,
   type,
@@ -59,7 +62,7 @@ export async function fetchReferences({
   return { items, total };
 }
 
-export async function fetchReferenceById(
+async function _fetchReferenceById(
   id: string,
   userId: string
 ): Promise<ReferenceWithRelations | null> {
@@ -68,3 +71,17 @@ export async function fetchReferenceById(
     include: referenceInclude,
   });
 }
+
+export const fetchReferences = cache(
+  unstable_cache(_fetchReferences, ["library-list"], {
+    tags: [CACHE_TAGS.library],
+    revalidate: 60,
+  })
+);
+
+export const fetchReferenceById = cache(
+  unstable_cache(_fetchReferenceById, ["library-item"], {
+    tags: [CACHE_TAGS.library],
+    revalidate: 60,
+  })
+);

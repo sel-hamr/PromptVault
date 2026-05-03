@@ -1,12 +1,6 @@
-import type { listPiecesAction } from "@/lib/actions/piece.actions";
+import type { PieceWithRelations } from "@/lib/data/pieces";
 
-type ListPiecesResult = NonNullable<
-  Awaited<ReturnType<typeof listPiecesAction>>
->["data"];
-
-export type Piece = NonNullable<
-  NonNullable<ListPiecesResult>["pieces"]
->[number];
+export type Piece = PieceWithRelations;
 
 export type PieceType = Piece["piece_type"];
 

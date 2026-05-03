@@ -10,7 +10,8 @@ const LIBRARY_PIECES = [
     id: "p1",
     type: "Persona",
     label: "Expert Marketer",
-    content: "Act as a senior marketing strategist with 15 years of B2B SaaS experience.",
+    content:
+      "Act as a senior marketing strategist with 15 years of B2B SaaS experience.",
     color: "#8b5cf6",
   },
   {
@@ -24,7 +25,8 @@ const LIBRARY_PIECES = [
     id: "p3",
     type: "Format",
     label: "Bullet Points",
-    content: "Structure your response as numbered bullet points with concise language.",
+    content:
+      "Structure your response as numbered bullet points with concise language.",
     color: "#10b981",
   },
   {
@@ -38,7 +40,8 @@ const LIBRARY_PIECES = [
     id: "p5",
     type: "Context",
     label: "SaaS Product",
-    content: "The product is a B2B SaaS tool targeting small business owners in the US.",
+    content:
+      "The product is a B2B SaaS tool targeting small business owners in the US.",
     color: "#f43f5e",
   },
   {
@@ -66,7 +69,7 @@ export default function Demo() {
   const assembledPrompt = canvas.map((p) => p.content).join("\n\n");
 
   return (
-    <section id="demo" className="bg-background py-28">
+    <section id="demo" className="bg-background py-7">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}
@@ -93,8 +96,10 @@ export default function Demo() {
             className="mx-auto mt-4 max-w-md text-base text-muted-foreground"
           >
             Click the{" "}
-            <span className="font-medium text-violet-500 dark:text-violet-400">+ button</span> to
-            add pieces to your canvas and watch the prompt assemble live.
+            <span className="font-medium text-violet-500 dark:text-violet-400">
+              + button
+            </span>{" "}
+            to add pieces to your canvas and watch the prompt assemble live.
           </motion.p>
         </motion.div>
 
@@ -196,7 +201,11 @@ export default function Demo() {
                           initial={{ opacity: 0, scale: 0.9, y: -8 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.85, y: 8 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 25,
+                          }}
                           className="group flex items-start gap-2 rounded-xl border border-border bg-background p-3"
                         >
                           <GripVertical className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground/30" />

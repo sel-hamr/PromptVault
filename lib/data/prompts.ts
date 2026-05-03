@@ -1,5 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { ModelTarget, Prisma, Visibility } from "@prisma/client";
 import { db } from "@/lib/db";
+import { CACHE_TAGS } from "./cache-tags";
 
 type FetchPromptsArgs = {
   userId?: string;
@@ -27,7 +29,7 @@ export type PromptWithRelations = Prisma.PromptGetPayload<{
   include: typeof promptInclude;
 }>;
 
-export async function fetchPrompts({
+async function _fetchPrompts({
   userId,
   q,
   category_id,
@@ -64,4 +66,22 @@ export async function fetchPrompts({
             : { created_at: "desc" };
 
   return db.prompt.findMany({ where, orderBy, take, include: promptInclude });
+}
+
+export async function fetchPrompts(args: FetchPromptsArgs): Promise<PromptWithRelations[]> {
+  const key = [
+    "prompts-list",
+    args.userId ?? "",
+    args.q ?? "",
+    args.category_id ?? "",
+    args.model_target ?? "",
+    args.visibility ?? "",
+    args.sort ?? "newest",
+    String(args.take ?? 50),
+  ];
+
+  return unstable_cache(() => _fetchPrompts(args), key, {
+    tags: [CACHE_TAGS.prompts],
+    revalidate: 60,
+  })();
 }
