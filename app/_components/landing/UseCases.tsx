@@ -1,7 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeUp, scaleUp, staggerContainer, staggerSlow } from "@/lib/motion-variants";
+import {
+  fadeUp,
+  scaleUp,
+  staggerContainer,
+  staggerSlow,
+} from "@/lib/motion-variants";
 
 const USE_CASES = [
   {
@@ -44,7 +49,7 @@ const USE_CASES = [
 
 export default function UseCases() {
   return (
-    <section id="community" className="bg-muted/30 py-28">
+    <section id="community" className="bg-muted/30 py-7">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}
@@ -79,7 +84,10 @@ export default function UseCases() {
             <motion.div
               key={uc.role}
               variants={scaleUp}
-              whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+              whileHover={{
+                y: -6,
+                transition: { type: "spring", stiffness: 300, damping: 20 },
+              }}
               className="flex flex-col rounded-2xl border border-border bg-card p-6"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-muted/50 text-2xl">

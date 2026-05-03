@@ -1,5 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { ModelTarget, Prisma, Visibility } from "@prisma/client";
 import { db } from "@/lib/db";
+import { CACHE_TAGS } from "./cache-tags";
 
 type ExploreSortOption =
   | "newest"
@@ -39,7 +41,7 @@ export type ExplorePromptWithRelations = Prisma.PromptGetPayload<{
   include: typeof promptInclude;
 }>;
 
-export async function fetchExplorePrompts({
+async function _fetchExplorePrompts({
   q,
   category_id,
   model_target,
@@ -74,4 +76,23 @@ export async function fetchExplorePrompts({
             : { created_at: "desc" };
 
   return db.prompt.findMany({ where, orderBy, take, include: promptInclude });
+}
+
+export async function fetchExplorePrompts(
+  args: FetchExplorePromptsArgs
+): Promise<ExplorePromptWithRelations[]> {
+  const key = [
+    "explore-prompts",
+    args.q ?? "",
+    args.category_id ?? "",
+    args.model_target ?? "",
+    args.visibility ?? "",
+    args.sort ?? "newest",
+    String(args.take ?? 60),
+  ];
+
+  return unstable_cache(() => _fetchExplorePrompts(args), key, {
+    tags: [CACHE_TAGS.prompts],
+    revalidate: 120,
+  })();
 }

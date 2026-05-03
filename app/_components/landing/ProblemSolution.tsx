@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion";
 import { X, Check } from "lucide-react";
-import { fadeUp, slideLeft, slideRight, staggerContainer } from "@/lib/motion-variants";
+import {
+  fadeUp,
+  slideLeft,
+  slideRight,
+  staggerContainer,
+} from "@/lib/motion-variants";
 
 const PROBLEMS = [
   "Prompts buried in 12 different notes apps",
@@ -22,7 +27,7 @@ const SOLUTIONS = [
 
 export default function ProblemSolution() {
   return (
-    <section className="bg-background py-28">
+    <section className="bg-background py-7">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { actionClient, authActionClient } from "@/lib/safe-action";
@@ -11,6 +11,7 @@ import {
   listPromptsSchema,
   forkPromptSchema,
 } from "@/lib/validators";
+import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
 export const createPromptAction = authActionClient
   .schema(createPromptSchema)
@@ -42,7 +43,8 @@ export const createPromptAction = authActionClient
       });
     }
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { prompt };
   });
 
@@ -59,9 +61,7 @@ export const updatePromptAction = authActionClient
       where: { id },
       data: {
         ...rest,
-        ...(variables !== undefined
-          ? { variables }
-          : {}),
+        ...(variables !== undefined ? { variables } : {}),
         version_count: { increment: 1 },
       },
     });
@@ -75,8 +75,9 @@ export const updatePromptAction = authActionClient
       }
     }
 
-    revalidatePath("/dashboard");
-    revalidatePath(`/prompts/${id}`);
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.prompt(id), {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { prompt };
   });
 
@@ -97,7 +98,9 @@ export const deletePromptAction = authActionClient
       });
     }
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.prompt(id), {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { success: true };
   });
 
@@ -206,7 +209,8 @@ export const duplicatePromptAction = authActionClient
       },
     });
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { prompt };
   });
 
@@ -242,7 +246,9 @@ export const forkPromptAction = authActionClient
       data: { fork_count: { increment: 1 } },
     });
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.prompt(id), {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { prompt };
   });
 

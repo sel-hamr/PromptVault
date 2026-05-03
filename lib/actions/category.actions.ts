@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import slugify from "slugify";
 import { db } from "@/lib/db";
 import { actionClient, authActionClient } from "@/lib/safe-action";
@@ -9,6 +9,7 @@ import {
   updateCategorySchema,
   categoryIdSchema,
 } from "@/lib/validators";
+import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
 async function uniqueSlug(name: string) {
   const base = slugify(name, { lower: true, strict: true });
@@ -36,7 +37,7 @@ export const createCategoryAction = authActionClient
       data: { name, slug, parent_id: parent_id ?? null, depth },
     });
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.categories, {});
     return { category };
   });
 
@@ -66,7 +67,7 @@ export const updateCategoryAction = authActionClient
       },
     });
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.categories, {});
     return { category };
   });
 
@@ -82,7 +83,8 @@ export const deleteCategoryAction = authActionClient
     });
     await db.category.delete({ where: { id } });
 
-    revalidatePath("/dashboard");
+    revalidateTag(CACHE_TAGS.categories, {});
+    revalidateTag(CACHE_TAGS.prompts, {});
     return { success: true };
   });
 

@@ -1,5 +1,8 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { Prisma, ModelTarget } from "@prisma/client";
 import { db } from "@/lib/db";
+import { CACHE_TAGS } from "./cache-tags";
 
 export type ActivityPoint = { date: string; prompts: number; pieces: number; forks: number };
 
@@ -38,21 +41,21 @@ function buildActivitySeries(
 
   const byDate = Object.fromEntries(points.map((p) => [p.date, p]));
   for (const { created_at } of promptDates) {
-    const key = created_at.toISOString().slice(0, 10);
+    const key = new Date(created_at).toISOString().slice(0, 10);
     if (byDate[key]) byDate[key].prompts++;
   }
   for (const { created_at } of pieceDates) {
-    const key = created_at.toISOString().slice(0, 10);
+    const key = new Date(created_at).toISOString().slice(0, 10);
     if (byDate[key]) byDate[key].pieces++;
   }
   for (const { created_at } of forkDates) {
-    const key = created_at.toISOString().slice(0, 10);
+    const key = new Date(created_at).toISOString().slice(0, 10);
     if (byDate[key]) byDate[key].forks++;
   }
   return points;
 }
 
-export async function fetchDashboardData(userId: string) {
+async function _fetchDashboardData(userId: string) {
   const since14 = new Date();
   since14.setDate(since14.getDate() - 13);
   since14.setHours(0, 0, 0, 0);
@@ -122,3 +125,10 @@ export async function fetchDashboardData(userId: string) {
 
   return { stats, recentPrompts, topPrompts, modelDistribution, activityData };
 }
+
+export const fetchDashboardData = cache(
+  unstable_cache(_fetchDashboardData, ["dashboard"], {
+    tags: [CACHE_TAGS.dashboard],
+    revalidate: 60,
+  })
+);

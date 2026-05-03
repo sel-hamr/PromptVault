@@ -17,11 +17,11 @@ import {
 } from "./types";
 
 interface PieceDetailsDialogProps {
-  piece?: Piece;
+  piece: Piece;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onEdit: (piece: Piece) => void;
-  onDelete: (piece: Piece) => void;
+  onEdit: () => void;
+  onDelete: () => void;
   ownerName: string;
   canManage: boolean;
 }
@@ -47,7 +47,6 @@ export function PieceDetailsDialog({
   ownerName,
   canManage,
 }: PieceDetailsDialogProps) {
-  if (!piece) return null;
 
   const variableTags = getPieceTags(piece);
 
@@ -125,7 +124,7 @@ export function PieceDetailsDialog({
               variant="outline"
               onClick={() => {
                 onOpenChange(false);
-                onEdit(piece);
+                onEdit();
               }}
             >
               Edit
@@ -135,7 +134,7 @@ export function PieceDetailsDialog({
               variant="destructive"
               onClick={() => {
                 onOpenChange(false);
-                onDelete(piece);
+                onDelete();
               }}
             >
               Delete

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { actionClient, authActionClient } from "@/lib/safe-action";
@@ -10,6 +10,7 @@ import {
   pieceIdSchema,
   listPiecesSchema,
 } from "@/lib/validators";
+import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
 export const createPieceAction = authActionClient
   .schema(createPieceSchema)
@@ -21,7 +22,8 @@ export const createPieceAction = authActionClient
         variables: parsedInput.variables,
       },
     });
-    revalidatePath("/pieces");
+    revalidateTag(CACHE_TAGS.pieces, {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { piece };
   });
 
@@ -38,12 +40,11 @@ export const updatePieceAction = authActionClient
       where: { id },
       data: {
         ...rest,
-        ...(variables !== undefined
-          ? { variables }
-          : {}),
+        ...(variables !== undefined ? { variables } : {}),
       },
     });
-    revalidatePath("/pieces");
+    revalidateTag(CACHE_TAGS.pieces, {});
+    revalidateTag(CACHE_TAGS.piece(id), {});
     return { piece };
   });
 
@@ -55,7 +56,9 @@ export const deletePieceAction = authActionClient
     if (existing.user_id !== userId) return { error: "Forbidden" };
 
     await db.promptPiece.delete({ where: { id } });
-    revalidatePath("/pieces");
+    revalidateTag(CACHE_TAGS.pieces, {});
+    revalidateTag(CACHE_TAGS.piece(id), {});
+    revalidateTag(CACHE_TAGS.dashboard, {});
     return { success: true };
   });
 
@@ -106,14 +109,7 @@ export const listPiecesAction = actionClient
       orderBy,
       take: take + 1,
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
-      },
+      include: { user: { select: { id: true, username: true } } },
     });
 
     const hasMore = pieces.length > take;
