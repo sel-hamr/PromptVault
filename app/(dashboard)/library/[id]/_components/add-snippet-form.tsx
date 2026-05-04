@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
@@ -16,6 +17,7 @@ interface AddSnippetFormProps {
 }
 
 export function AddSnippetForm({ referenceId, nextOrder }: AddSnippetFormProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -26,6 +28,7 @@ export function AddSnippetForm({ referenceId, nextOrder }: AddSnippetFormProps) 
       setTitle("");
       setContent("");
       setOpen(false);
+      router.refresh();
     },
     onError: () => toast.error("Failed to save snippet"),
   });

@@ -87,6 +87,11 @@ export const forkPromptSchema = z.object({
   visibility: visibilitySchema.default("PRIVATE"),
 });
 
+export const ratePromptSchema = z.object({
+  id: z.string().cuid(),
+  value: z.number().int().min(1).max(5),
+});
+
 // ---------- PromptPiece schemas ----------
 
 export const createPieceSchema = z.object({
@@ -214,3 +219,51 @@ export type CreateReferenceInput = z.infer<typeof createReferenceSchema>;
 export type UpdateReferenceInput = z.infer<typeof updateReferenceSchema>;
 export type CreateSnippetInput = z.infer<typeof createSnippetSchema>;
 export type UpdateSnippetInput = z.infer<typeof updateSnippetSchema>;
+
+// ---------- Settings schemas ----------
+
+export const updateUsernameSchema = z.object({
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(30, "Username must be at most 30 characters")
+    .regex(/^[a-z0-9_]+$/, "Only lowercase letters, numbers, and underscores"),
+});
+
+export const updateEmailSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  current_password: z.string().min(1, "Current password is required"),
+});
+
+export const changePasswordSchema = z
+  .object({
+    current_password: z.string().min(1, "Current password is required"),
+    new_password: z.string().min(8, "Password must be at least 8 characters"),
+    confirm_password: z.string(),
+  })
+  .refine((d) => d.new_password === d.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
+
+export const deleteAccountSchema = z.object({
+  confirmation: z.literal("delete my account", {
+    errorMap: () => ({ message: 'Type "delete my account" to confirm' }),
+  }),
+  current_password: z.string().min(1, "Password is required"),
+});
+
+export type UpdateUsernameInput = z.infer<typeof updateUsernameSchema>;
+export type UpdateEmailInput = z.infer<typeof updateEmailSchema>;
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+// ---------- Contact ----------
+
+export const contactFormSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  subject: z.string().min(3, "Subject must be at least 3 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+export type ContactFormInput = z.infer<typeof contactFormSchema>;

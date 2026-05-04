@@ -37,7 +37,6 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Library",
     items: [
       { label: "My Prompts", href: ROUTES.prompts, icon: FileText },
-      { label: "Collections", href: ROUTES.collections, icon: FolderHeart },
       { label: "References", href: ROUTES.library, icon: BookMarked },
     ],
   },

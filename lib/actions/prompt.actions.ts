@@ -10,6 +10,7 @@ import {
   promptIdSchema,
   listPromptsSchema,
   forkPromptSchema,
+  ratePromptSchema,
 } from "@/lib/validators";
 import { CACHE_TAGS } from "@/lib/data/cache-tags";
 
@@ -260,4 +261,21 @@ export const incrementPromptUseAction = actionClient
       data: { use_count: { increment: 1 } },
     });
     return { success: true };
+  });
+
+export const ratePromptAction = authActionClient
+  .schema(ratePromptSchema)
+  .action(async ({ parsedInput: { id, value }, ctx: { userId } }) => {
+    const prompt = await db.prompt.findUnique({ where: { id }, select: { user_id: true, avg_rating: true, rating_count: true } });
+    if (!prompt) return { error: "Prompt not found" };
+    if (prompt.user_id !== userId) return { error: "Only the owner can rate this prompt" };
+    if (prompt.rating_count > 0) return { error: "Already rated" };
+
+    await db.prompt.update({
+      where: { id },
+      data: { avg_rating: value, rating_count: 1 },
+    });
+
+    revalidateTag(CACHE_TAGS.prompt(id), {});
+    return { avg_rating: value, rating_count: 1 };
   });

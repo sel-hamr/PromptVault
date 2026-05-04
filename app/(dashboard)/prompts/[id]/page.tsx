@@ -10,6 +10,7 @@ import { PromptActions } from "./_components/prompt-actions";
 import { PromptContentBlock } from "./_components/prompt-content-block";
 import { PromptStats } from "./_components/prompt-stats";
 import { PromptForkedFrom } from "./_components/prompt-forked-from";
+import { PromptRatingWidget } from "./_components/prompt-rating-widget";
 import type { Category, Tag } from "../_components/types";
 
 interface Props {
@@ -88,6 +89,14 @@ export default async function PromptDetailPage({ params }: Props) {
           />
 
           <PromptStats prompt={prompt} />
+
+          {isOwner && (
+            <PromptRatingWidget
+              promptId={prompt.id}
+              avgRating={prompt.avg_rating}
+              ratingCount={prompt.rating_count}
+            />
+          )}
 
           {/* Category & Tags */}
           <div className="rounded-lg border border-border bg-card p-4 space-y-4">
