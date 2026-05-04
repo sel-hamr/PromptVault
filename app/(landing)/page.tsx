@@ -4,6 +4,7 @@ import ProblemSolution from "@/app/_components/landing/ProblemSolution";
 import Features from "@/app/_components/landing/Features";
 import Demo from "@/app/_components/landing/Demo";
 import UseCases from "@/app/_components/landing/UseCases";
+import FAQ from "@/app/_components/landing/FAQ";
 import Footer from "@/app/_components/landing/Footer";
 
 export default function HomePage() {
@@ -16,6 +17,7 @@ export default function HomePage() {
         <Features />
         <Demo />
         <UseCases />
+        <FAQ />
       </main>
       <Footer />
     </div>
