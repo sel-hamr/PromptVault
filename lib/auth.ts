@@ -64,15 +64,21 @@ export const authOptions: NextAuthOptions = {
     error: ROUTES.login,
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
+      }
+      if (trigger === "update" && session?.name) {
+        token.name = session.name;
       }
       return token;
     },
     session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id;
+      }
+      if (token.name) {
+        session.user.name = token.name as string;
       }
       return session;
     },

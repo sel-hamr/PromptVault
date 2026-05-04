@@ -30,7 +30,7 @@ export const createReferenceAction = authActionClient
       },
     });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { reference };
   });
 
@@ -58,7 +58,7 @@ export const updateReferenceAction = authActionClient
       },
     });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { reference };
   });
 
@@ -70,7 +70,7 @@ export const deleteReferenceAction = authActionClient
 
     await db.reference.delete({ where: { id } });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { id };
   });
 
@@ -95,7 +95,7 @@ export const createSnippetAction = authActionClient
 
     const snippet = await db.snippet.create({ data: parsedInput });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { snippet };
   });
 
@@ -113,7 +113,7 @@ export const updateSnippetAction = authActionClient
 
     const snippet = await db.snippet.update({ where: { id }, data });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { snippet };
   });
 
@@ -128,7 +128,7 @@ export const deleteSnippetAction = authActionClient
 
     await db.snippet.delete({ where: { id } });
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
     return { id };
   });
 
@@ -153,5 +153,5 @@ export const reorderSnippetsAction = authActionClient
       )
     );
 
-    revalidateTag(CACHE_TAGS.library, {});
+    revalidateTag(CACHE_TAGS.library);
   });
