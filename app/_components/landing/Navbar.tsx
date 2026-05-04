@@ -4,16 +4,14 @@ import {
   motion,
   useScroll,
   useMotionValueEvent,
-  AnimatePresence,
   useMotionValue,
   useSpring,
-  useMotionTemplate,
   type Variants,
 } from "framer-motion";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { Vault, Menu, X, Sun, Moon, ArrowUpRight } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useState, useRef } from "react";
+import { Vault, Menu, X, ArrowUpRight } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // ─── Scroll Progress Bar ───────────────────────────────────────────────────────
 function ScrollProgress() {
@@ -28,42 +26,6 @@ function ScrollProgress() {
           "linear-gradient(90deg, #7c3aed, #a855f7, #6366f1, #7c3aed)",
       }}
     />
-  );
-}
-
-// ─── Theme Toggle ──────────────────────────────────────────────────────────────
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const dark = resolvedTheme === "dark";
-  return (
-    <motion.button
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.86, rotate: 20 }}
-      onClick={() => setTheme(dark ? "light" : "dark")}
-      className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground"
-      aria-label="Toggle theme"
-    >
-      <AnimatePresence mode="wait">
-        {mounted && (
-          <motion.span
-            key={dark ? "moon" : "sun"}
-            initial={{ opacity: 0, rotate: -90, scale: 0.3 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 90, scale: 0.3 }}
-            transition={{ duration: 0.2, ease: "backOut" }}
-            className="absolute flex items-center justify-center"
-          >
-            {dark ? (
-              <Moon className="h-3.5 w-3.5" />
-            ) : (
-              <Sun className="h-3.5 w-3.5" />
-            )}
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </motion.button>
   );
 }
 
