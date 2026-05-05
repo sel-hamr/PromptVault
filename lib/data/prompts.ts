@@ -68,20 +68,7 @@ async function _fetchPrompts({
   return db.prompt.findMany({ where, orderBy, take, include: promptInclude });
 }
 
-export async function fetchPrompts(args: FetchPromptsArgs): Promise<PromptWithRelations[]> {
-  const key = [
-    "prompts-list",
-    args.userId ?? "",
-    args.q ?? "",
-    args.category_id ?? "",
-    args.model_target ?? "",
-    args.visibility ?? "",
-    args.sort ?? "newest",
-    String(args.take ?? 50),
-  ];
-
-  return unstable_cache(() => _fetchPrompts(args), key, {
-    tags: [CACHE_TAGS.prompts],
-    revalidate: 60,
-  })();
-}
+export const fetchPrompts = unstable_cache(_fetchPrompts, ["prompts-list"], {
+  tags: [CACHE_TAGS.prompts],
+  revalidate: 60,
+});

@@ -44,8 +44,8 @@ export const createPromptAction = authActionClient
       });
     }
 
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.dashboard);
     return { prompt };
   });
 
@@ -76,9 +76,9 @@ export const updatePromptAction = authActionClient
       }
     }
 
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.prompt(id), {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.prompt(id));
+    revalidateTag(CACHE_TAGS.dashboard);
     return { prompt };
   });
 
@@ -99,9 +99,9 @@ export const deletePromptAction = authActionClient
       });
     }
 
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.prompt(id), {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.prompt(id));
+    revalidateTag(CACHE_TAGS.dashboard);
     return { success: true };
   });
 
@@ -210,8 +210,8 @@ export const duplicatePromptAction = authActionClient
       },
     });
 
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.dashboard);
     return { prompt };
   });
 
@@ -247,9 +247,9 @@ export const forkPromptAction = authActionClient
       data: { fork_count: { increment: 1 } },
     });
 
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.prompt(id), {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.prompt(id));
+    revalidateTag(CACHE_TAGS.dashboard);
     return { prompt };
   });
 
@@ -276,6 +276,6 @@ export const ratePromptAction = authActionClient
       data: { avg_rating: value, rating_count: 1 },
     });
 
-    revalidateTag(CACHE_TAGS.prompt(id), {});
+    revalidateTag(CACHE_TAGS.prompt(id));
     return { avg_rating: value, rating_count: 1 };
   });

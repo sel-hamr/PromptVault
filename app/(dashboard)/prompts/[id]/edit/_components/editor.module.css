@@ -15,6 +15,7 @@
   white-space: pre-wrap;
   word-break: break-word;
   overflow: hidden;
+  scrollbar-gutter: stable;
   pointer-events: none;
   color: var(--foreground);
   background: transparent;
@@ -40,6 +41,12 @@
   border: none;
   outline: none;
   box-sizing: border-box;
+  scrollbar-gutter: stable;
+}
+
+.editor-textarea::selection {
+  background: oklch(0.62 0.17 240 / 0.25);
+  color: transparent;
 }
 
 /* ── Token colors ────────────────────────────────────────── */
@@ -68,3 +75,23 @@
 
 /* Variables — amber, the only saturated token so they pop */
 .t-variable { color: oklch(0.62 0.17 55); font-weight: 600; }
+
+/* ── Dark mode overrides ─────────────────────────────────── */
+:global(.dark) .t-h1 { color: oklch(0.92 0 0); }
+:global(.dark) .t-h2 { color: oklch(0.85 0 0); }
+:global(.dark) .t-h3 { color: oklch(0.78 0 0); }
+
+:global(.dark) .t-bold   { color: oklch(0.92 0 0); }
+:global(.dark) .t-italic { color: oklch(0.75 0 0); }
+:global(.dark) .t-strike { color: oklch(0.55 0 0); }
+
+:global(.dark) .t-code  { color: oklch(0.75 0.1 200); background: oklch(0.2 0 0); }
+:global(.dark) .t-fence { color: oklch(0.7 0.06 200); }
+
+:global(.dark) .t-quote { color: oklch(0.65 0 0); }
+:global(.dark) .t-hr    { color: oklch(0.45 0 0); }
+:global(.dark) .t-list  { color: oklch(0.78 0 0); }
+:global(.dark) .t-table { color: oklch(0.68 0 0); }
+:global(.dark) .t-link  { color: oklch(0.7 0.1 200); }
+
+:global(.dark) .t-variable { color: oklch(0.78 0.17 55); }

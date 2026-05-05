@@ -22,8 +22,8 @@ export const createPieceAction = authActionClient
         variables: parsedInput.variables,
       },
     });
-    revalidateTag(CACHE_TAGS.pieces, {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.pieces);
+    revalidateTag(CACHE_TAGS.dashboard);
     return { piece };
   });
 
@@ -43,8 +43,8 @@ export const updatePieceAction = authActionClient
         ...(variables !== undefined ? { variables } : {}),
       },
     });
-    revalidateTag(CACHE_TAGS.pieces, {});
-    revalidateTag(CACHE_TAGS.piece(id), {});
+    revalidateTag(CACHE_TAGS.pieces);
+    revalidateTag(CACHE_TAGS.piece(id));
     return { piece };
   });
 
@@ -56,9 +56,9 @@ export const deletePieceAction = authActionClient
     if (existing.user_id !== userId) return { error: "Forbidden" };
 
     await db.promptPiece.delete({ where: { id } });
-    revalidateTag(CACHE_TAGS.pieces, {});
-    revalidateTag(CACHE_TAGS.piece(id), {});
-    revalidateTag(CACHE_TAGS.dashboard, {});
+    revalidateTag(CACHE_TAGS.pieces);
+    revalidateTag(CACHE_TAGS.piece(id));
+    revalidateTag(CACHE_TAGS.dashboard);
     return { success: true };
   });
 

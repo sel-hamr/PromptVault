@@ -607,6 +607,18 @@ export default function Hero() {
               </Link>
             </motion.div>
           </motion.div>
+
+          <motion.div
+            ref={statsRef}
+            variants={fadeUp}
+            className="mt-10 flex items-center gap-6 border-t border-border/40 pt-8 lg:justify-start"
+          >
+            <CountStat value={2400} suffix="+" label="Prompts created" shouldCount={statsVisible} />
+            <div className="h-8 w-px bg-border/40" aria-hidden="true" />
+            <CountStat value={500} suffix="+" label="Active users" shouldCount={statsVisible} />
+            <div className="h-8 w-px bg-border/40" aria-hidden="true" />
+            <CountStat value={100} suffix="%" label="Free to start" shouldCount={statsVisible} />
+          </motion.div>
         </motion.div>
 
         <motion.div

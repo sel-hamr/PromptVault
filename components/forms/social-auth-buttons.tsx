@@ -1,5 +1,18 @@
+"use client";
+
+import { signIn } from "next-auth/react";
+
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
+
+const btnClass = cn(
+  "h-11 w-full gap-2 text-[0.875rem] font-medium",
+  "border-border/60 bg-background hover:bg-muted/60",
+  "dark:border-border dark:bg-input/20 dark:hover:bg-input/35",
+  "shadow-[0_1px_0_color-mix(in_oklab,var(--foreground)_4%,transparent)]",
+  "transition-all duration-150"
+);
 
 export function SocialAuthButtons() {
   return (
@@ -8,13 +21,8 @@ export function SocialAuthButtons() {
         type="button"
         variant="outline"
         size="lg"
-        className={cn(
-          "h-11 w-full gap-2 text-[0.875rem] font-medium",
-          "border-border/60 bg-background hover:bg-muted/60",
-          "dark:border-border dark:bg-input/20 dark:hover:bg-input/35",
-          "shadow-[0_1px_0_color-mix(in_oklab,var(--foreground)_4%,transparent)]",
-          "transition-all duration-150"
-        )}
+        className={btnClass}
+        onClick={() => signIn("google", { callbackUrl: ROUTES.dashboard })}
       >
         <GoogleIcon className="size-4 shrink-0" />
         Google
@@ -23,13 +31,8 @@ export function SocialAuthButtons() {
         type="button"
         variant="outline"
         size="lg"
-        className={cn(
-          "h-11 w-full gap-2 text-[0.875rem] font-medium",
-          "border-border/60 bg-background hover:bg-muted/60",
-          "dark:border-border dark:bg-input/20 dark:hover:bg-input/35",
-          "shadow-[0_1px_0_color-mix(in_oklab,var(--foreground)_4%,transparent)]",
-          "transition-all duration-150"
-        )}
+        className={btnClass}
+        onClick={() => signIn("github", { callbackUrl: ROUTES.dashboard })}
       >
         <GitHubIcon className="size-4 shrink-0" />
         GitHub

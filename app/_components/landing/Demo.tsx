@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { Plus, X, GripVertical } from "lucide-react";
+import { Plus, X, GripVertical, Check, Copy } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/motion-variants";
 
 const LIBRARY_PIECES = [
@@ -55,6 +55,7 @@ const LIBRARY_PIECES = [
 
 export default function Demo() {
   const [canvas, setCanvas] = useState<typeof LIBRARY_PIECES>([]);
+  const [copied, setCopied] = useState(false);
 
   const addPiece = (piece: (typeof LIBRARY_PIECES)[0]) => {
     if (!canvas.find((p) => p.id === piece.id)) {
@@ -68,8 +69,14 @@ export default function Demo() {
 
   const assembledPrompt = canvas.map((p) => p.content).join("\n\n");
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(assembledPrompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <section id="demo" className="bg-background py-7">
+    <section id="demo" className="bg-background py-24">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}
@@ -247,8 +254,15 @@ export default function Demo() {
                   Prompt Preview
                 </span>
                 {canvas.length > 0 && (
-                  <button className="rounded-md bg-violet-500/15 px-2.5 py-1 text-[10px] font-medium text-violet-500 hover:bg-violet-500/25 transition-colors">
-                    Copy
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1.5 rounded-md bg-violet-500/15 px-2.5 py-1 text-[10px] font-medium text-violet-500 hover:bg-violet-500/25 transition-colors"
+                  >
+                    {copied ? (
+                      <><Check className="h-3 w-3" />Copied!</>
+                    ) : (
+                      <><Copy className="h-3 w-3" />Copy</>
+                    )}
                   </button>
                 )}
               </div>

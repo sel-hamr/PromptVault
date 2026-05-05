@@ -31,10 +31,16 @@ export function PromptContentBlock({
     }
   };
 
-  // Process content to highlight {{variables}} and split into lines
   const lines = useMemo(() => {
     return content.split("\n").map((line, lineIndex) => {
-      // Split by {{variable}} pattern
+      if (line === "") {
+        return (
+          <div key={lineIndex} className="table-row">
+            <span className="table-cell break-all">&nbsp;</span>
+          </div>
+        );
+      }
+
       const parts = line.split(/(\{\{[^}]+\}\})/g);
 
       return (
