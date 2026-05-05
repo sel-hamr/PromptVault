@@ -371,7 +371,7 @@ function DesktopDashboardUI() {
                   {/* Blinking cursor */}
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "steps(1)" }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
                     className="inline-block h-2.5 w-0.5 rounded-sm bg-violet-400/70 ml-0.5 translate-y-0.5"
                   />
                   {/* Token count badge */}
