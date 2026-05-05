@@ -2,6 +2,7 @@
 
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useMotionValueEvent,
   useMotionValue,
@@ -91,8 +92,8 @@ function MagneticCTA({
 // ─── Nav Links with sliding pill ──────────────────────────────────────────────
 const NAV = [
   { label: "Features", href: "#features" },
-  { label: "Library", href: "/library" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Demo", href: "#demo" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 function NavLinks() {
@@ -249,8 +250,78 @@ export default function Navbar() {
             className="relative z-10 flex items-center gap-2 md:hidden"
           >
             <ThemeToggle />
+            <button
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-muted/40 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {open ? (
+                  <motion.span
+                    key="close"
+                    initial={{ opacity: 0, rotate: -45 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 45 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <X className="h-4 w-4" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 45 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -45 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <Menu className="h-4 w-4" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
           </motion.div>
         </motion.div>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden border-t border-border/40 bg-background/95 backdrop-blur-xl md:hidden"
+            >
+              <nav className="flex flex-col gap-1 px-6 py-4">
+                {NAV.map(({ label, href }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+                  >
+                    {label}
+                  </Link>
+                ))}
+                <div className="my-2 h-px bg-border/40" />
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setOpen(false)}
+                  className="mt-1 rounded-xl bg-violet-600 px-4 py-2.5 text-center text-sm font-semibold text-white"
+                >
+                  Start free
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

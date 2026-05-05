@@ -58,19 +58,7 @@ async function _fetchPieces({
   return db.promptPiece.findMany({ where, orderBy, take, include: pieceInclude });
 }
 
-export async function fetchPieces(args: FetchPiecesArgs): Promise<PieceWithRelations[]> {
-  const key = [
-    "pieces-list",
-    args.userId ?? "",
-    args.q ?? "",
-    args.sort ?? "newest",
-    args.piece_type ?? "",
-    args.visibility ?? "",
-    String(args.take ?? 100),
-  ];
-
-  return unstable_cache(() => _fetchPieces(args), key, {
-    tags: [CACHE_TAGS.pieces],
-    revalidate: 60,
-  })();
-}
+export const fetchPieces = unstable_cache(_fetchPieces, ["pieces-list"], {
+  tags: [CACHE_TAGS.pieces],
+  revalidate: 60,
+});

@@ -1,10 +1,12 @@
 import Navbar from "@/app/_components/landing/Navbar";
 import Hero from "@/app/_components/landing/Hero";
+import AppPreview from "@/app/_components/landing/AppPreview";
 import ProblemSolution from "@/app/_components/landing/ProblemSolution";
 import Features from "@/app/_components/landing/Features";
 import Demo from "@/app/_components/landing/Demo";
 import UseCases from "@/app/_components/landing/UseCases";
 import FAQ from "@/app/_components/landing/FAQ";
+import FinalCTA from "@/app/_components/landing/FinalCTA";
 import Footer from "@/app/_components/landing/Footer";
 
 export default function HomePage() {
@@ -13,6 +15,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <AppPreview />
         <ProblemSolution />
         <Features />
         <Demo />

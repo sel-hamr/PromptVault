@@ -49,7 +49,7 @@ const USE_CASES = [
 
 export default function UseCases() {
   return (
-    <section id="community" className="bg-muted/30 py-7">
+    <section id="community" className="bg-muted/30 py-24">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}

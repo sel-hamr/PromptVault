@@ -27,7 +27,7 @@ const SOLUTIONS = [
 
 export default function ProblemSolution() {
   return (
-    <section className="bg-background py-7">
+    <section className="bg-background py-24">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}

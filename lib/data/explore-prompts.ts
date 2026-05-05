@@ -78,21 +78,11 @@ async function _fetchExplorePrompts({
   return db.prompt.findMany({ where, orderBy, take, include: promptInclude });
 }
 
-export async function fetchExplorePrompts(
-  args: FetchExplorePromptsArgs
-): Promise<ExplorePromptWithRelations[]> {
-  const key = [
-    "explore-prompts",
-    args.q ?? "",
-    args.category_id ?? "",
-    args.model_target ?? "",
-    args.visibility ?? "",
-    args.sort ?? "newest",
-    String(args.take ?? 60),
-  ];
-
-  return unstable_cache(() => _fetchExplorePrompts(args), key, {
+export const fetchExplorePrompts = unstable_cache(
+  _fetchExplorePrompts,
+  ["explore-prompts"],
+  {
     tags: [CACHE_TAGS.prompts],
     revalidate: 120,
-  })();
-}
+  }
+);

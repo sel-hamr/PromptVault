@@ -21,7 +21,7 @@ export const createTagAction = authActionClient
       create: { name, slug },
       update: {},
     });
-    revalidateTag(CACHE_TAGS.tags, {});
+    revalidateTag(CACHE_TAGS.tags);
     return { tag };
   });
 
@@ -41,7 +41,7 @@ export const deleteTagAction = authActionClient
   .action(async ({ parsedInput: { id } }) => {
     await db.promptTag.deleteMany({ where: { tag_id: id } });
     await db.tag.delete({ where: { id } });
-    revalidateTag(CACHE_TAGS.tags, {});
+    revalidateTag(CACHE_TAGS.tags);
     return { success: true };
   });
 
@@ -62,9 +62,9 @@ export const attachTagAction = authActionClient
       data: { usage_count: { increment: 1 } },
     });
 
-    revalidateTag(CACHE_TAGS.tags, {});
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.prompt(prompt_id), {});
+    revalidateTag(CACHE_TAGS.tags);
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.prompt(prompt_id));
     return { success: true };
   });
 
@@ -83,8 +83,8 @@ export const detachTagAction = authActionClient
       data: { usage_count: { decrement: 1 } },
     });
 
-    revalidateTag(CACHE_TAGS.tags, {});
-    revalidateTag(CACHE_TAGS.prompts, {});
-    revalidateTag(CACHE_TAGS.prompt(prompt_id), {});
+    revalidateTag(CACHE_TAGS.tags);
+    revalidateTag(CACHE_TAGS.prompts);
+    revalidateTag(CACHE_TAGS.prompt(prompt_id));
     return { success: true };
   });

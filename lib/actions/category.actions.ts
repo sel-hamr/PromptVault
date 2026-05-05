@@ -37,7 +37,7 @@ export const createCategoryAction = authActionClient
       data: { name, slug, parent_id: parent_id ?? null, depth },
     });
 
-    revalidateTag(CACHE_TAGS.categories, {});
+    revalidateTag(CACHE_TAGS.categories);
     return { category };
   });
 
@@ -67,7 +67,7 @@ export const updateCategoryAction = authActionClient
       },
     });
 
-    revalidateTag(CACHE_TAGS.categories, {});
+    revalidateTag(CACHE_TAGS.categories);
     return { category };
   });
 
@@ -83,8 +83,8 @@ export const deleteCategoryAction = authActionClient
     });
     await db.category.delete({ where: { id } });
 
-    revalidateTag(CACHE_TAGS.categories, {});
-    revalidateTag(CACHE_TAGS.prompts, {});
+    revalidateTag(CACHE_TAGS.categories);
+    revalidateTag(CACHE_TAGS.prompts);
     return { success: true };
   });
 

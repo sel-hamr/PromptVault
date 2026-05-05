@@ -127,7 +127,7 @@ function FeatureCard({ feature }: { feature: (typeof FEATURES)[0] }) {
 
 export default function Features() {
   return (
-    <section id="features" className="bg-muted/30 py-7">
+    <section id="features" className="bg-muted/30 py-24">
       <div className="mx-auto max-w-6xl px-6">
         <motion.div
           variants={staggerContainer}
